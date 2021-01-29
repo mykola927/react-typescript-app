@@ -6,7 +6,7 @@ export const getUser = () => auth.currentUser;
 
 export default function SignUp() {
   const [userParams, setUserParams] = useState({
-    fullName: "",
+    displayName: "",
     email: "",
     password: "",
   });
@@ -23,15 +23,15 @@ export default function SignUp() {
   const handleOnSubmit = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
 
-    const { email, password, fullName } = userParams;
-    if (email && password && fullName) {
+    const { email, password, displayName } = userParams;
+    if (email && password && displayName) {
       auth
         .createUserWithEmailAndPassword(email, password)
         .then(async (cred) => {
           if (cred.user) {
             return firestore.collection("users").doc(cred.user.uid).set({
-              id: cred.user.uid,
-              fullName,
+              uid: cred.user.uid,
+              displayName: displayName,
               email,
             });
           }
@@ -48,10 +48,12 @@ export default function SignUp() {
       .signInWithPopup(provider)
       .then(async (cred) => {
         if (cred.user) {
-          return firestore.collection("users").doc(cred.user.uid).set({
-            id: cred.user.uid,
-            email: cred.user.email,
-            fullName: cred.user.displayName,
+          const { uid, email, displayName, photoURL } = cred.user;
+          return firestore.collection("users").doc(uid).set({
+            uid,
+            email,
+            displayName,
+            photoURL,
           });
         }
       })
@@ -67,9 +69,9 @@ export default function SignUp() {
         </div>
         <form>
           <input
-            name="fullName"
+            name="displayName"
             type="text"
-            placeholder="Enter your full name"
+            placeholder="Enter your display name"
             onChange={(e) => handleOnChange(e)}
           />
           <input
