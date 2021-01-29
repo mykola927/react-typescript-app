@@ -1,5 +1,5 @@
 import React from "react";
-import Menu from "../../components/Menu";
+import Menu from "../../containers/Menu";
 import { firebase } from "../../firebase";
 import { createGroupChat } from "../../firebase/groups";
 import "./styles.scss";
@@ -11,20 +11,7 @@ export default function Chat() {
         <div className="app-container__menu">
           <Menu />
         </div>
-        <div className="app-container__content">
-          <button
-            onClick={() =>
-              createGroupChat({
-                users: [{ uid: "id-test" }],
-                createdBy: "id-of-created-user",
-                groupName: "Test Group",
-                isPrivate: true,
-              })
-            }
-          >
-            Create group
-          </button>
-        </div>
+        <div className="app-container__content"></div>
       </div>
     </div>
   );

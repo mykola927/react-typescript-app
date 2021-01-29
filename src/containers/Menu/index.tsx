@@ -1,10 +1,11 @@
 import React, { useState } from "react";
-import CreateGroup from "../../containers/CreateGroup";
+import CreateGroup from "../CreateGroup";
 import { Button, Modal, Tabs, Dropdown, Menu } from "antd";
 import { auth } from "../../firebase";
 import { MoreOutlined } from "@ant-design/icons";
 import "./styles.scss";
 import { fetchUsers } from "../../firebase/users";
+import ContactsTab from "../ContactsTab";
 
 export default function MenuContent() {
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -36,12 +37,11 @@ export default function MenuContent() {
             M
           </Button>
 
-          <Button onClick={fetchUsers}>get users</Button>
+          {/* <Button onClick={fetchUsers}>get users</Button> */}
 
           <Dropdown.Button
             overlay={menu}
-            //   shape="circle"
-            icon={<MoreOutlined style={{ fontSize: "1.5rem" }} />}
+            icon={<MoreOutlined style={{ fontSize: "1.65rem" }} />}
           />
         </header>
         <div className="tabs-container">
@@ -50,7 +50,7 @@ export default function MenuContent() {
               Hello from converstations
             </Tabs.TabPane>
             <Tabs.TabPane tab="Contacts" key="2">
-              hello from contacts
+              <ContactsTab />
             </Tabs.TabPane>
           </Tabs>
         </div>

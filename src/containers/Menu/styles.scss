@@ -1,0 +1,54 @@
+.app-container__menu__content {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  > header {
+    height: 59px;
+    padding: 10px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    // border-bottom: 1px solid #cccccc;
+    .ant-btn-group {
+      > button {
+        border: none;
+        box-shadow: none;
+        border-radius: 50px !important;
+      }
+    }
+  }
+  .tabs-container {
+    flex-grow: 1;
+    .ant-tabs {
+      height: 100%;
+      .ant-tabs-nav-list {
+        width: 100%;
+        .ant-tabs-tab {
+          margin: 0;
+          width: 100%;
+          display: flex;
+          justify-content: center;
+          // background-color: red;
+        }
+      }
+      .ant-tabs-content-holder {
+        height: 100%;
+        .ant-tabs-content {
+          height: 100%;
+        }
+      }
+    }
+  }
+}
+
+.ant-modal-mask {
+  z-index: 2000;
+}
+.ant-modal-wrap {
+  z-index: 5000;
+}
+.ant-tabs-nav-operations {
+  position: absolute;
+  visibility: hidden;
+  pointer-events: none;
+}
