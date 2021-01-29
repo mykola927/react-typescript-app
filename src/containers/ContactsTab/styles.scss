@@ -1,0 +1,13 @@
+.contacts-tab {
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  // justify-content: space-between;
+  .ant-btn {
+    position: relative;
+    margin: auto -1px -1px -1px;
+    padding: 16px 0;
+    height: auto;
+    z-index: 100;
+  }
+}
