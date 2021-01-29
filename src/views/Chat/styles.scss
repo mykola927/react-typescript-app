@@ -11,7 +11,7 @@
     width: 100%;
     height: 100%;
     overflow: hidden;
-    background-color: #cccccc;
+    border: 1px solid #cccccc;
     &__menu {
       flex: 40%;
       min-width: 260px;
@@ -19,7 +19,7 @@
       z-index: 100;
       height: 100%;
       overflow: hidden;
-      background-color: red;
+      border-right: 1px solid #cccccc;
     }
     &__content {
       flex: 60%;

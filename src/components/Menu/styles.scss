@@ -1,0 +1,31 @@
+.app-container__menu__content {
+  > header {
+    height: 59px;
+    padding: 10px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #cccccc;
+  }
+  .tabs-container {
+    .ant-tabs {
+      width: 100%;
+      .ant-tabs-nav-list {
+        width: 100%;
+        .ant-tabs-tab {
+          margin: 0;
+          width: 100%;
+          display: flex;
+          justify-content: center;
+        }
+      }
+    }
+  }
+}
+
+.ant-modal-mask {
+  z-index: 2000;
+}
+.ant-modal-wrap {
+  z-index: 5000;
+}
