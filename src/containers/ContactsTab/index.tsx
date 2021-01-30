@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import CreateContact from "../CreateContact";
+import ContactCard from "../../components/ContactCard";
 import { Button } from "antd";
 import "./styles.scss";
 
@@ -19,14 +20,11 @@ export default function ContactsTab(props: Props) {
       <div className="contact-list">
         {contacts?.map((contact, index) => {
           return (
-            <>
-              <div className="contact-list__item" key={index}>
-                <div className="contact-image">
-                  <div>{contact.contactName[0]}</div>
-                </div>
-                <div className="contact-name">{contact.contactName}</div>
-              </div>
-            </>
+            <ContactCard
+              key={index}
+              contactName={contact.contactName}
+              contactId={contact.contactId}
+            />
           );
         })}
       </div>

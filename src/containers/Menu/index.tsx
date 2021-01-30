@@ -6,6 +6,7 @@ import { MoreOutlined } from "@ant-design/icons";
 import "./styles.scss";
 import { fetchUsers, fetchContacts } from "../../firebase/users";
 import ContactsTab from "../ContactsTab";
+import ConversationsTab from "../ConversationsTab";
 
 export default function MenuContent() {
   const [contacts, setContacts] = useState([]);
@@ -56,7 +57,7 @@ export default function MenuContent() {
         <div className="tabs-container">
           <Tabs defaultActiveKey="1" centered>
             <Tabs.TabPane tab="Coversations" key="1">
-              Hello from converstations
+              <ConversationsTab contacts={contacts} />
             </Tabs.TabPane>
             <Tabs.TabPane tab="Contacts" key="2">
               <ContactsTab contacts={contacts} />

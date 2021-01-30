@@ -1,0 +1,35 @@
+.contact-card {
+  height: 72px;
+  display: flex;
+  flex-direction: row;
+  // pointer-events: all;
+  transition: background-color 100ms ease-in;
+  &:hover {
+    background-color: #eee;
+    cursor: pointer;
+  }
+  &__image {
+    padding: 0 15px 0 13px;
+    display: flex;
+    align-items: center;
+    > div {
+      font-size: 1rem;
+      font-weight: 500;
+      height: 49px;
+      width: 49px;
+      background-color: #ccc;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 50%;
+    }
+  }
+  &__name {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    font-size: 1rem;
+    padding-right: 15px;
+    border-top: 1px solid #eee;
+  }
+}

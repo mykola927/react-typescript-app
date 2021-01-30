@@ -1,17 +1,7 @@
-.contacts-tab {
+.conversations-tab {
   display: flex;
   height: 100%;
   flex-direction: column;
-  .contact-list {
-    overflow-y: auto;
-    .contact-card {
-      &:nth-child(1) {
-        .contact-card__name {
-          border: none;
-        }
-      }
-    }
-  }
   .ant-btn {
     position: relative;
     margin: auto -1px -1px -1px;

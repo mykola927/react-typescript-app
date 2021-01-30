@@ -1,0 +1,56 @@
+.create-conversation {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  z-index: 100;
+  transition: transform 0.3s cubic-bezier(0.25, 0.75, 0.7, 1);
+  background-color: #fff;
+  > header {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    height: 108px;
+    padding: 0 20px 0 23px;
+    background-color: #00bfa5;
+    color: #fff;
+    > div {
+      display: flex;
+      align-items: center;
+      flex-direction: row;
+      height: 59px;
+      .ant-btn {
+        color: #fff;
+        margin-right: 16px;
+      }
+      > div {
+        flex-grow: 1;
+        font-weight: 500;
+        font-size: 19px;
+      }
+    }
+  }
+  .search-contacts {
+    > .search-input {
+      margin: 16px 24px 12px;
+    }
+    .contacts-list {
+      .contact-card {
+        &:nth-child(1) {
+          .contact-card__name {
+            border: none;
+          }
+        }
+      }
+    }
+    .no-contacts {
+      text-align: center;
+      padding: 72px 0;
+    }
+  }
+}
+
+.create-conversation.hide {
+  transform: translate(-100%);
+}
