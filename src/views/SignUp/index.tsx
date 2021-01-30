@@ -1,10 +1,10 @@
 import React, { useState } from "react";
+import { useHistory } from "react-router-dom";
 import { firebase, firestore, auth } from "../../firebase";
 import "./styles.scss";
 
-export const getUser = () => auth.currentUser;
-
 export default function SignUp() {
+  const history = useHistory();
   const [userParams, setUserParams] = useState({
     displayName: "",
     email: "",
@@ -29,11 +29,15 @@ export default function SignUp() {
         .createUserWithEmailAndPassword(email, password)
         .then(async (cred) => {
           if (cred.user) {
-            return firestore.collection("users").doc(cred.user.uid).set({
-              uid: cred.user.uid,
-              displayName: displayName,
-              email,
-            });
+            firestore
+              .collection("users")
+              .doc(cred.user.uid)
+              .set({
+                uid: cred.user.uid,
+                displayName: displayName,
+                email,
+              })
+              .then(() => history.push("/"));
           }
         })
         .catch((error) => console.error(error));
@@ -49,12 +53,16 @@ export default function SignUp() {
       .then(async (cred) => {
         if (cred.user) {
           const { uid, email, displayName, photoURL } = cred.user;
-          return firestore.collection("users").doc(uid).set({
-            uid,
-            email,
-            displayName,
-            photoURL,
-          });
+          firestore
+            .collection("users")
+            .doc(uid)
+            .set({
+              uid,
+              email,
+              displayName,
+              photoURL,
+            })
+            .then(() => history.push("/"));
         }
       })
       .catch((error) => console.error(error));
@@ -89,8 +97,6 @@ export default function SignUp() {
           <button onClick={handleOnSubmit}>Sign up</button>
           <button onClick={handleGoogleSignIn}>Sign In with Google</button>
         </form>
-        <button onClick={() => console.log(getUser())}>get user</button>
-        <button onClick={() => auth.signOut()}>sign out user</button>
       </div>
     </div>
   );
