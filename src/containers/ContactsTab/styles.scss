@@ -2,12 +2,59 @@
   display: flex;
   height: 100%;
   flex-direction: column;
-  // justify-content: space-between;
+  .contact-list {
+    overflow-y: auto;
+    &__item {
+      height: 72px;
+      display: flex;
+      flex-direction: row;
+      // pointer-events: all;
+      transition: background-color 100ms ease-in;
+      &:hover {
+        background-color: #eee;
+        cursor: pointer;
+      }
+      .contact-image {
+        padding: 0 15px 0 13px;
+        display: flex;
+        align-items: center;
+        > div {
+          font-size: 1rem;
+          font-weight: 500;
+          height: 49px;
+          width: 49px;
+          background-color: #ccc;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          border-radius: 50%;
+        }
+      }
+      .contact-name {
+        display: flex;
+        align-items: center;
+        width: 100%;
+        font-size: 1rem;
+        padding-right: 15px;
+        border-top: 1px solid #eee;
+      }
+      &:nth-child(1) {
+        .contact-name {
+          display: flex;
+          align-items: center;
+          width: 100%;
+          font-size: 1rem;
+          padding-right: 15px;
+          border-top: none;
+        }
+      }
+    }
+  }
   .ant-btn {
     position: relative;
     margin: auto -1px -1px -1px;
     padding: 16px 0;
-    height: auto;
+    height: 56px;
     z-index: 100;
   }
 }

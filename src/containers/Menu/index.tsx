@@ -1,14 +1,25 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import CreateGroup from "../CreateGroup";
 import { Button, Modal, Tabs, Dropdown, Menu } from "antd";
 import { auth } from "../../firebase";
 import { MoreOutlined } from "@ant-design/icons";
 import "./styles.scss";
-import { fetchUsers } from "../../firebase/users";
+import { fetchUsers, fetchContacts } from "../../firebase/users";
 import ContactsTab from "../ContactsTab";
 
 export default function MenuContent() {
+  const [contacts, setContacts] = useState([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
+
+  // Get all contacts
+  useEffect(() => {
+    fetchContacts()
+      .then((res) => {
+        setContacts(res);
+        console.log(res);
+      })
+      .catch((err) => console.error(err));
+  }, []);
 
   const handleModalShow = () => {
     setIsModalVisible(true);
@@ -37,8 +48,6 @@ export default function MenuContent() {
             M
           </Button>
 
-          {/* <Button onClick={fetchUsers}>get users</Button> */}
-
           <Dropdown.Button
             overlay={menu}
             icon={<MoreOutlined style={{ fontSize: "1.65rem" }} />}
@@ -50,7 +59,7 @@ export default function MenuContent() {
               Hello from converstations
             </Tabs.TabPane>
             <Tabs.TabPane tab="Contacts" key="2">
-              <ContactsTab />
+              <ContactsTab contacts={contacts} />
             </Tabs.TabPane>
           </Tabs>
         </div>

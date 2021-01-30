@@ -1,6 +1,7 @@
 .app-container__menu__content {
   display: flex;
   flex-direction: column;
+  position: relative;
   height: 100%;
   > header {
     height: 59px;
@@ -19,18 +20,23 @@
   }
   .tabs-container {
     flex-grow: 1;
+    overflow-y: auto;
     .ant-tabs {
       height: 100%;
-      .ant-tabs-nav-list {
-        width: 100%;
-        .ant-tabs-tab {
-          margin: 0;
+      .ant-tabs-nav {
+        margin: 0;
+        .ant-tabs-nav-list {
           width: 100%;
-          display: flex;
-          justify-content: center;
-          // background-color: red;
+          .ant-tabs-tab {
+            margin: 0;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            // background-color: red;
+          }
         }
       }
+
       .ant-tabs-content-holder {
         height: 100%;
         .ant-tabs-content {
@@ -45,7 +51,7 @@
   z-index: 2000;
 }
 .ant-modal-wrap {
-  z-index: 5000;
+  z-index: 2001;
 }
 .ant-tabs-nav-operations {
   position: absolute;
