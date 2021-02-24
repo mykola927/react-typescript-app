@@ -67,6 +67,22 @@ export const addContact = async (params: AddContactParams) => {
   }
 };
 
+export const fetchUserData = async () => {
+  const currentUser = getCurrentUser();
+
+  if (currentUser) {
+    return await usersRef
+      .doc(currentUser.uid)
+      .get()
+      .then(async (doc) => {
+        const data = doc.data();
+        if (data) {
+          return data;
+        }
+      });
+  }
+};
+
 export const fetchContacts = async () => {
   const currentUser = getCurrentUser();
 
