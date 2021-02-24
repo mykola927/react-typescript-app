@@ -4,7 +4,7 @@ import { Button, Modal, Tabs, Dropdown, Menu } from "antd";
 import { auth } from "../../firebase";
 import { MoreOutlined } from "@ant-design/icons";
 import "./styles.scss";
-import { fetchUsers, fetchContacts } from "../../firebase/users";
+import { fetchUserData, fetchContacts } from "../../firebase/users";
 import { fetchGroups } from "../../firebase/groups";
 import ContactsTab from "../ContactsTab";
 import ConversationsTab from "../ConversationsTab";
@@ -14,6 +14,7 @@ interface Props {
 }
 
 export default function MenuContent(props: Props) {
+  const [user, setUser] = useState(null as any);
   const [contacts, setContacts] = useState([]);
   const [groupsChats, setGroupChats] = useState([] as any[]);
   const [toFetchContacts, setToFetchContacts] = useState(false);
@@ -24,6 +25,13 @@ export default function MenuContent(props: Props) {
     fetchGroups().then((res) => {
       if (Array.isArray(res)) {
         setGroupChats(res);
+      }
+    });
+
+    fetchUserData().then((res) => {
+      if (res) {
+        setUser(res);
+        console.log(res);
       }
     });
   }, []);
@@ -54,17 +62,27 @@ export default function MenuContent(props: Props) {
   );
 
   const { handleSelectChat } = props;
+  const { currentUser } = auth;
 
   return (
     <>
       <div className="app-container__menu__content">
         <header>
           <Button
-            onClick={() => console.log(auth.currentUser)}
+            onClick={() => console.log(currentUser)}
             shape="circle"
-            style={{ height: 40, width: 40 }}
+            style={{
+              height: "40px",
+              width: "40px",
+              backgroundImage: `url(${user?.photoURL})`,
+              backgroundSize: "contain",
+            }}
           >
-            M
+            {user && (
+              <>
+                {user.photoURL ? " " : `${user.displayName[0].toUpperCase()}`}
+              </>
+            )}
           </Button>
 
           <Dropdown.Button
