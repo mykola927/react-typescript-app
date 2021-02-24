@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { fetchGroups } from "../../firebase/groups";
 import CreateConversation from "../CreateConversation";
+import ConversationCard from "../../components/ConversationCard";
 import { Button } from "antd";
 import "./styles.scss";
 
@@ -29,18 +30,14 @@ export default function ConversationsTab(props: Props) {
         <div className="conversations-list">
           {groupsChats?.map((group, index) => {
             return (
-              <button key={index} onClick={() => handleSelectChat(group)}>
-                {JSON.stringify(group)}
-              </button>
+              <ConversationCard
+                key={index}
+                conversationName={group.groupName}
+                conversationId={group.id}
+                onClick={() => handleSelectChat(group)}
+              />
             );
           })}
-          <button
-            onClick={() => {
-              fetchGroups();
-            }}
-          >
-            get groups
-          </button>
         </div>
         <Button onClick={handleShowCreateConversation}>New conversation</Button>
       </div>

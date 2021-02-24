@@ -6,7 +6,15 @@
   .conversations-list {
     // padding-bottom: 40px;
     // height: 100%;
+    overflow-y: auto;
     flex-grow: 1;
+    .conversation-card {
+      &:nth-child(1) {
+        .conversation-card__name {
+          border: none;
+        }
+      }
+    }
   }
   .ant-btn {
     // position: absolute;
