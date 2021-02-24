@@ -6,14 +6,16 @@ import "./styles.scss";
 
 interface Contact {
   contactName: string;
-  contactId: string;
+  uid: string;
 }
 interface Props {
   contacts: Contact[];
+  toFetchContacts: boolean;
+  setToFetchContacts: any;
 }
 
 export default function ContactsTab(props: Props) {
-  const { contacts } = props;
+  const { contacts, toFetchContacts, setToFetchContacts } = props;
   const [isModalVisible, setIsModalVisible] = useState(false);
   return (
     <div className="contacts-tab">
@@ -23,7 +25,7 @@ export default function ContactsTab(props: Props) {
             <ContactCard
               key={index}
               contactName={contact.contactName}
-              contactId={contact.contactId}
+              contactId={contact.uid}
             />
           );
         })}
@@ -33,6 +35,8 @@ export default function ContactsTab(props: Props) {
         contacts={contacts}
         isModalVisible={isModalVisible}
         setIsModalVisible={setIsModalVisible}
+        toFetchContacts={toFetchContacts}
+        setToFetchContacts={setToFetchContacts}
       />
     </div>
   );

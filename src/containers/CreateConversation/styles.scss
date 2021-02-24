@@ -28,12 +28,21 @@
         flex-grow: 1;
         font-weight: 500;
         font-size: 19px;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
       }
     }
   }
   .search-contacts {
     > .search-input {
-      margin: 16px 24px 12px;
+      margin: 30px 24px 12px;
+      > .selected-contacts {
+        margin-bottom: 12px;
+        .selected-contact-pill {
+          margin-bottom: 6px;
+        }
+      }
     }
     .contacts-list {
       .contact-card {
@@ -43,6 +52,17 @@
           }
         }
       }
+    }
+    .create-group-section {
+      bottom: 0;
+      right: 0;
+      left: 0;
+      height: 106px;
+      position: absolute;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: rgb(237, 237, 237);
     }
     .no-contacts {
       text-align: center;

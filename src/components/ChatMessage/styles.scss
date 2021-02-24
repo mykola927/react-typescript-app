@@ -1,0 +1,46 @@
+.message {
+  display: flex;
+  text-align: left;
+  &.sent {
+    flex-direction: row-reverse;
+    text-align: right;
+    .message__content {
+      background-color: rgb(255, 177, 74);
+      &__text {
+        padding: 8px 8px 0 12px;
+      }
+      &__at {
+        padding: 0 8px 0 16px;
+      }
+    }
+  }
+  &.received {
+    .message__content {
+      background: #f1f1f1;
+      color: #252525;
+      &__text {
+        padding: 8px 16px 0 8px;
+      }
+      &__at {
+        text-align: right;
+        padding: 0 8px 0 60px;
+      }
+    }
+  }
+  &__content {
+    max-width: 500px;
+    line-height: 24px;
+    border-radius: 6px;
+    position: relative;
+    color: white;
+    overflow: hidden;
+    word-wrap: break-word;
+    &__text {
+      text-align: left;
+    }
+    &__at {
+      margin-top: -3px;
+      font-size: 0.725rem;
+    }
+  }
+}

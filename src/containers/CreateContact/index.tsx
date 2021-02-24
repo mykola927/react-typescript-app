@@ -5,18 +5,20 @@ import { Modal, Input } from "antd";
 
 interface Contacts {
   contactName: string;
-  contactId: string;
+  uid: string;
 }
 
 interface Props {
   contacts: Contacts[];
   isModalVisible: boolean;
   setIsModalVisible: any;
+  toFetchContacts: boolean;
+  setToFetchContacts: any;
 }
 
 const initialContactState = {
   contactName: "",
-  contactId: "",
+  uid: "",
 };
 
 export default function CreateContact(props: Props) {
@@ -24,7 +26,12 @@ export default function CreateContact(props: Props) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const { isModalVisible, setIsModalVisible } = props;
+  const {
+    isModalVisible,
+    setIsModalVisible,
+    setToFetchContacts,
+    toFetchContacts,
+  } = props;
 
   const handleModalHide = () => {
     setIsModalVisible(false);
@@ -43,14 +50,17 @@ export default function CreateContact(props: Props) {
   };
 
   const handleCreateContact = () => {
-    if (contactDetails.contactId && contactDetails.contactName) {
+    if (contactDetails.uid && contactDetails.contactName) {
       setLoading(true);
       addContact(contactDetails).then((res) => {
+        console.log(res);
         if (res) {
           setError(res);
           setLoading(false);
         } else {
           setLoading(false);
+          handleModalHide();
+          setToFetchContacts(!toFetchContacts);
         }
       });
     } else {
@@ -78,8 +88,8 @@ export default function CreateContact(props: Props) {
         Enter contact's id:
         <Input
           type="text"
-          name="contactId"
-          value={contactDetails.contactId}
+          name="uid"
+          value={contactDetails.uid}
           onChange={(e) => handleOnChange(e)}
           style={{ marginBottom: 8 }}
         />

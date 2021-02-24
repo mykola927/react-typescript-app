@@ -15,33 +15,56 @@ export const fetchUsers = async () => {
 
 interface AddContactParams {
   contactName: string;
-  contactId: string;
+  uid: string;
 }
 
 // Contacts Section
 
 export const addContact = async (params: AddContactParams) => {
-  const { contactId } = params;
+  const currentUser = getCurrentUser();
+  const { uid } = params;
 
   // check if user with given id exists
-  return await usersRef
-    .where("uid", "==", contactId)
-    .get()
-    .then(async (snapshot) => {
-      if (snapshot.empty) {
-        return "Contact with given id does not exist.";
-      } else {
-        const currentUser = getCurrentUser();
-        if (currentUser) {
-          const currentUserRef = usersRef.doc(currentUser.uid);
+  if (currentUser) {
+    return await usersRef
+      .where("uid", "==", uid)
+      .get()
+      .then(async (snapshot) => {
+        if (snapshot.empty) {
+          return "Contact with given id does not exist.";
+        } else {
+          // check if contact already exists
+          if (currentUser) {
+            const currentUserRef = usersRef.doc(currentUser.uid);
 
-          await currentUserRef.update({
-            contacts: firebase.firestore.FieldValue.arrayUnion(params),
-          });
+            return await usersRef
+              .doc(currentUser.uid)
+              .get()
+              .then(async (doc) => {
+                const data = doc.data();
+                if (data) {
+                  const test = data.contacts.find(
+                    (elm: AddContactParams) => elm.uid === uid
+                  );
+
+                  if (test) {
+                    return "Contact already exists";
+                  } else {
+                    await currentUserRef.update({
+                      contacts: firebase.firestore.FieldValue.arrayUnion(
+                        params
+                      ),
+                    });
+                  }
+
+                  console.log(test);
+                }
+              });
+          }
         }
-      }
-    })
-    .catch((err) => console.log(err));
+      })
+      .catch((err) => console.log(err));
+  }
 };
 
 export const fetchContacts = async () => {

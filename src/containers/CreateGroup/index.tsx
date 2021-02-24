@@ -50,16 +50,16 @@ export default function CreateGroup(props: Props) {
     }
   };
 
-  const handleCreateGroup = (users: GroupUsers[]) => {
-    if (auth.currentUser) {
-      createGroupChat({
-        users: users,
-        createdBy: auth.currentUser.uid,
-        groupName: groupName,
-        isPrivate: users.length > 2,
-      });
-    }
-  };
+  // const handleCreateGroup = (users: GroupUsers[]) => {
+  //   if (auth.currentUser) {
+  //     createGroupChat({
+  //       users: users,
+  //       createdBy: auth.currentUser.uid,
+  //       groupName: groupName,
+  //       isPrivate: users.length > 2,
+  //     });
+  //   }
+  // };
 
   return (
     <>
@@ -67,7 +67,7 @@ export default function CreateGroup(props: Props) {
         title="Create a Group Chat"
         visible={isModalVisible}
         onCancel={handleModalHide}
-        onOk={() => handleCreateGroup([{ uid: "hello" }])}
+        // onOk={() => handleCreateGroup([{ uid: "hello" }])}
         okText="Create Group"
       >
         Enter group name:

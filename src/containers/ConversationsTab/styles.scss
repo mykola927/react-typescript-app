@@ -2,11 +2,20 @@
   display: flex;
   height: 100%;
   flex-direction: column;
+  position: relative;
+  .conversations-list {
+    // padding-bottom: 40px;
+    // height: 100%;
+    flex-grow: 1;
+  }
   .ant-btn {
-    position: relative;
+    // position: absolute;
+    right: 0;
+    left: 0;
+    bottom: 0;
     margin: auto -1px -1px -1px;
     padding: 16px 0;
-    height: 56px;
+    height: 63px;
     z-index: 100;
   }
 }

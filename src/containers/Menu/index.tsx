@@ -5,12 +5,28 @@ import { auth } from "../../firebase";
 import { MoreOutlined } from "@ant-design/icons";
 import "./styles.scss";
 import { fetchUsers, fetchContacts } from "../../firebase/users";
+import { fetchGroups } from "../../firebase/groups";
 import ContactsTab from "../ContactsTab";
 import ConversationsTab from "../ConversationsTab";
 
-export default function MenuContent() {
+interface Props {
+  handleSelectChat: (chat: any) => void;
+}
+
+export default function MenuContent(props: Props) {
   const [contacts, setContacts] = useState([]);
+  const [groupsChats, setGroupChats] = useState([] as any[]);
+  const [toFetchContacts, setToFetchContacts] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
+
+  // Get all groups
+  useEffect(() => {
+    fetchGroups().then((res) => {
+      if (Array.isArray(res)) {
+        setGroupChats(res);
+      }
+    });
+  }, []);
 
   // Get all contacts
   useEffect(() => {
@@ -20,7 +36,7 @@ export default function MenuContent() {
         console.log(res);
       })
       .catch((err) => console.error(err));
-  }, []);
+  }, [toFetchContacts]);
 
   const handleModalShow = () => {
     setIsModalVisible(true);
@@ -36,6 +52,8 @@ export default function MenuContent() {
       </Menu.Item>
     </Menu>
   );
+
+  const { handleSelectChat } = props;
 
   return (
     <>
@@ -57,10 +75,18 @@ export default function MenuContent() {
         <div className="tabs-container">
           <Tabs defaultActiveKey="1" centered>
             <Tabs.TabPane tab="Coversations" key="1">
-              <ConversationsTab contacts={contacts} />
+              <ConversationsTab
+                contacts={contacts}
+                groupsChats={groupsChats}
+                handleSelectChat={handleSelectChat}
+              />
             </Tabs.TabPane>
             <Tabs.TabPane tab="Contacts" key="2">
-              <ContactsTab contacts={contacts} />
+              <ContactsTab
+                contacts={contacts}
+                setToFetchContacts={setToFetchContacts}
+                toFetchContacts={toFetchContacts}
+              />
             </Tabs.TabPane>
           </Tabs>
         </div>
