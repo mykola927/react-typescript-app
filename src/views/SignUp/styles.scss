@@ -5,17 +5,22 @@
   align-items: center;
   justify-content: center;
   padding: 0 16px;
-  background-color: #cccccc;
+  background-color: #fff;
   &__form {
-    padding: 24px 16px;
-    max-width: 450px;
+    padding: 24px 24px 36px;
+    max-width: 420px;
     background-color: #ffffff;
+    border: 1px solid #ccc;
+    border-radius: 3px;
     &__header {
       margin-bottom: 24px;
       > h2 {
         margin-bottom: 8px;
+        font-size: 1.625rem;
+        font-weight: 600;
       }
       > p {
+        padding-right: 16px;
         font-size: 0.875rem;
         line-height: 1.5;
       }
@@ -29,8 +34,11 @@
       > button {
         height: 44px;
         padding: 0 16px;
-        margin-top: 24px;
         font-size: 0.875rem;
+      }
+      .sign-up-btn {
+        margin-top: 36px;
+        margin-bottom: 12px;
       }
     }
   }

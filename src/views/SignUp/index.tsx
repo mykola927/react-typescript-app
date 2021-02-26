@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import { firebase, firestore, auth } from "../../firebase";
+import { Button, Input } from "antd";
+import { GoogleOutlined } from "@ant-design/icons";
 import "./styles.scss";
 
 export default function SignUp() {
@@ -73,29 +75,37 @@ export default function SignUp() {
       <div className="sign-up__form">
         <div className="sign-up__form__header">
           <h2>Sign Up</h2>
-          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit</p>
+          <p>
+            Create an account in order to start chatting with your friends, or
+            sign in directly with google
+          </p>
         </div>
         <form>
-          <input
+          <Input
             name="displayName"
             type="text"
-            placeholder="Enter your display name"
+            placeholder="Enter your full name"
             onChange={(e) => handleOnChange(e)}
           />
-          <input
+          <Input
             name="email"
             type="email"
             placeholder="Enter your email"
             onChange={(e) => handleOnChange(e)}
           />
-          <input
+          <Input
             name="password"
             type="password"
             placeholder="Enter a password"
             onChange={(e) => handleOnChange(e)}
           />
-          <button onClick={handleOnSubmit}>Sign up</button>
-          <button onClick={handleGoogleSignIn}>Sign In with Google</button>
+          <Button onClick={handleOnSubmit} block className="sign-up-btn">
+            Sign up with email
+          </Button>
+          <div className="with-google-text"></div>
+          <Button onClick={handleGoogleSignIn} block>
+            <GoogleOutlined style={{ fontSize: 22, marginTop: 2 }} />
+          </Button>
         </form>
       </div>
     </div>
