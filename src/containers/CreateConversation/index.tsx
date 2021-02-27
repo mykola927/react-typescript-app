@@ -10,6 +10,7 @@ import "./styles.scss";
 import SelectedContactPill from "../../components/SelectedContactPill";
 
 interface Contact {
+  photoURL: string;
   contactName: string;
   uid: string;
 }
@@ -119,6 +120,7 @@ export default function CreateConversation(props: Props) {
                   return (
                     <SelectedContactPill
                       key={index}
+                      contactImage={contact.photoURL}
                       contactName={contact.contactName}
                       onClick={() => handleRemoveSelectedContact(contact)}
                     />
@@ -139,6 +141,7 @@ export default function CreateConversation(props: Props) {
                 <ContactCard
                   key={index}
                   contactName={contact.contactName}
+                  contactImage={contact.photoURL}
                   contactId={contact.uid}
                   onClick={() => handleContactOnClick(contact)}
                 />

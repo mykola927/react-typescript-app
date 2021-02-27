@@ -6,6 +6,7 @@ import { Button } from "antd";
 import "./styles.scss";
 
 interface Contacts {
+  photoURL: string;
   contactName: string;
   uid: string;
 }

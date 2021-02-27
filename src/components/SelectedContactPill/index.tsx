@@ -12,8 +12,14 @@ export default function SelectedContactPill(props: Props) {
   return (
     <div className="pill-container">
       <div className="selected-contact-pill">
-        <span className="selected-contact-pill__image">
-          {contactImage ? contactImage : contactName[0]}
+        <span
+          className="selected-contact-pill__image"
+          style={{
+            backgroundImage: `url('${contactImage}')`,
+            backgroundSize: "cover",
+          }}
+        >
+          {contactImage ? null : contactName[0]}
         </span>
         <div className="selected-contact-pill__name">{contactName}</div>
         <div className="selected-contact-pill__remove" onClick={onClick}>
