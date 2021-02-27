@@ -38,6 +38,8 @@ export default function SignUp() {
                 uid: cred.user.uid,
                 displayName: displayName,
                 email,
+                contacts: [],
+                photoUrl: "",
               })
               .then(() => history.push("/"));
           }
@@ -63,6 +65,7 @@ export default function SignUp() {
               email,
               displayName,
               photoURL,
+              contacts: [],
             })
             .then(() => history.push("/"));
         }
