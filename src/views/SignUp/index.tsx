@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useHistory } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { firebase, firestore, auth } from "../../firebase";
 import { Button, Input } from "antd";
 import { GoogleOutlined } from "@ant-design/icons";
@@ -12,6 +12,8 @@ export default function SignUp() {
     email: "",
     password: "",
   });
+  const [loading, setLoading] = useState(false);
+  const [googleLoading, setGoogleLoading] = useState(false);
 
   const handleOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     event.preventDefault();
@@ -27,6 +29,7 @@ export default function SignUp() {
 
     const { email, password, displayName } = userParams;
     if (email && password && displayName) {
+      setLoading(true);
       auth
         .createUserWithEmailAndPassword(email, password)
         .then(async (cred) => {
@@ -41,10 +44,16 @@ export default function SignUp() {
                 contacts: [],
                 photoUrl: "",
               })
-              .then(() => history.push("/"));
+              .then(() => {
+                setLoading(false);
+                history.push("/");
+              });
           }
         })
-        .catch((error) => console.error(error));
+        .catch((error) => {
+          console.error(error);
+          setLoading(false);
+        });
     }
   };
 
@@ -52,6 +61,7 @@ export default function SignUp() {
     event.preventDefault();
 
     var provider = new firebase.auth.GoogleAuthProvider();
+    setGoogleLoading(true);
     auth
       .signInWithPopup(provider)
       .then(async (cred) => {
@@ -67,10 +77,16 @@ export default function SignUp() {
               photoURL,
               contacts: [],
             })
-            .then(() => history.push("/"));
+            .then(() => {
+              setGoogleLoading(false);
+              history.push("/");
+            });
         }
       })
-      .catch((error) => console.error(error));
+      .catch((error) => {
+        console.error(error);
+        setGoogleLoading(false);
+      });
   };
 
   return (
@@ -102,13 +118,21 @@ export default function SignUp() {
             placeholder="Enter a password"
             onChange={(e) => handleOnChange(e)}
           />
-          <Button onClick={handleOnSubmit} block className="sign-up-btn">
+          <Button
+            onClick={handleOnSubmit}
+            block
+            className="sign-up-btn"
+            loading={loading}
+          >
             Sign up with email
           </Button>
           <div className="with-google-text"></div>
-          <Button onClick={handleGoogleSignIn} block>
+          <Button onClick={handleGoogleSignIn} block loading={googleLoading}>
             <GoogleOutlined style={{ fontSize: 22, marginTop: 2 }} />
           </Button>
+          <div className="sign-in-with-email">
+            Or, <Link to="/sign-in">Sign in with email</Link>
+          </div>
         </form>
       </div>
     </div>
