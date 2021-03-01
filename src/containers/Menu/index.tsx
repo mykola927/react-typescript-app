@@ -1,33 +1,30 @@
 import React, { useState, useEffect } from "react";
-import CreateGroup from "../CreateGroup";
-import { Button, Modal, Tabs, Dropdown, Menu } from "antd";
 import { auth } from "../../firebase";
-import { MoreOutlined } from "@ant-design/icons";
-import "./styles.scss";
+import {
+  ConversationInterface,
+  ContactInterface,
+} from "../../common/interfaces";
 import { fetchUserData, fetchContacts } from "../../firebase/users";
-import { fetchGroups } from "../../firebase/groups";
+import { fetchGroups, deleteGroup } from "../../firebase/groups";
 import ContactsTab from "../ContactsTab";
 import ConversationsTab from "../ConversationsTab";
+import { Button, Tabs, Dropdown, Menu } from "antd";
+import { MoreOutlined } from "@ant-design/icons";
+import "./styles.scss";
 
 interface Props {
+  contacts: ContactInterface[];
+  conversations: any;
   handleSelectChat: (chat: any) => void;
 }
 
 export default function MenuContent(props: Props) {
   const [user, setUser] = useState(null as any);
-  const [contacts, setContacts] = useState([]);
-  const [groupsChats, setGroupChats] = useState([] as any[]);
   const [toFetchContacts, setToFetchContacts] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
 
   // Get all groups
   useEffect(() => {
-    fetchGroups().then((res) => {
-      if (Array.isArray(res)) {
-        setGroupChats(res);
-      }
-    });
-
     fetchUserData().then((res) => {
       if (res) {
         setUser(res);
@@ -36,16 +33,6 @@ export default function MenuContent(props: Props) {
     });
   }, []);
 
-  // Get all contacts
-  useEffect(() => {
-    fetchContacts()
-      .then((res) => {
-        setContacts(res);
-        console.log(res);
-      })
-      .catch((err) => console.error(err));
-  }, [toFetchContacts]);
-
   const handleModalShow = () => {
     setIsModalVisible(true);
   };
@@ -53,7 +40,7 @@ export default function MenuContent(props: Props) {
   const menu = (
     <Menu>
       <Menu.Item key="1" onClick={handleModalShow}>
-        New group
+        Change profile image
       </Menu.Item>
       <Menu.Item key="2" onClick={() => auth.signOut()}>
         Sign out
@@ -61,7 +48,7 @@ export default function MenuContent(props: Props) {
     </Menu>
   );
 
-  const { handleSelectChat } = props;
+  const { contacts, conversations, handleSelectChat } = props;
   const { currentUser } = auth;
 
   return (
@@ -95,12 +82,13 @@ export default function MenuContent(props: Props) {
             <Tabs.TabPane tab="Coversations" key="1">
               <ConversationsTab
                 contacts={contacts}
-                groupsChats={groupsChats}
+                conversations={conversations}
                 handleSelectChat={handleSelectChat}
               />
             </Tabs.TabPane>
             <Tabs.TabPane tab="Contacts" key="2">
               <ContactsTab
+                user={user}
                 contacts={contacts}
                 setToFetchContacts={setToFetchContacts}
                 toFetchContacts={toFetchContacts}
@@ -109,10 +97,6 @@ export default function MenuContent(props: Props) {
           </Tabs>
         </div>
       </div>
-      <CreateGroup
-        isModalVisible={isModalVisible}
-        setIsModalVisible={setIsModalVisible}
-      />
     </>
   );
 }

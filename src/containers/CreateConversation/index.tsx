@@ -1,36 +1,38 @@
 import React, { useState, useEffect } from "react";
-import { auth } from "../../firebase";
-import { addContact, fetchContacts } from "../../firebase/users";
 import { createGroupChat } from "../../firebase/groups";
+import { ContactInterface } from "../../common/interfaces";
+import ContactCard from "../../components/ContactCard";
+import SelectedContactPill from "../../components/SelectedContactPill";
 import { Input, Button, Modal } from "antd";
 import { ArrowLeftOutlined, ArrowRightOutlined } from "@ant-design/icons";
-
-import ContactCard from "../../components/ContactCard";
 import "./styles.scss";
-import SelectedContactPill from "../../components/SelectedContactPill";
-
-interface Contact {
-  photoURL: string;
-  contactName: string;
-  uid: string;
-}
 
 interface Props {
   creatingGroup: boolean;
-  contacts: Contact[];
+  contacts: ContactInterface[];
   handleShowCreateConversation: () => void;
+  handleSelectChat: (chat?: any) => void;
 }
 
 export default function CreateConversation(props: Props) {
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [selectedContacts, setSelectedContacts] = useState([] as Contact[]);
-  const [availableContacts, setAvailableContacts] = useState([] as Contact[]);
+  const [selectedContacts, setSelectedContacts] = useState(
+    [] as ContactInterface[]
+  );
+  const [availableContacts, setAvailableContacts] = useState(
+    [] as ContactInterface[]
+  );
   const [searchInput, setSearchInput] = useState("");
   const [groupName, setGroupName] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const { creatingGroup, contacts, handleShowCreateConversation } = props;
+  const {
+    creatingGroup,
+    contacts,
+    handleShowCreateConversation,
+    handleSelectChat,
+  } = props;
 
   useEffect(() => {
     if (contacts) {
@@ -41,7 +43,7 @@ export default function CreateConversation(props: Props) {
   // updated available contacts
   useEffect(() => {
     if (selectedContacts.length > 0 && availableContacts) {
-      var updatedAvailableContacts: Contact[] = [];
+      var updatedAvailableContacts: ContactInterface[] = [];
 
       availableContacts.forEach((available) => {
         // removed selected contacts from available
@@ -73,11 +75,11 @@ export default function CreateConversation(props: Props) {
     setGroupName(event.target.value);
   };
 
-  const handleContactOnClick = (contact: Contact) => {
+  const handleContactOnClick = (contact: ContactInterface) => {
     setSelectedContacts((prevState) => [...prevState, contact]);
   };
 
-  const handleRemoveSelectedContact = (contact: Contact) => {
+  const handleRemoveSelectedContact = (contact: ContactInterface) => {
     const selectedContactsClone = [...selectedContacts];
     const updatedSelectedContacts = selectedContactsClone.filter(
       (selectedContact) => selectedContact.uid !== contact.uid
@@ -87,11 +89,24 @@ export default function CreateConversation(props: Props) {
   };
 
   const handleCreateGroup = () => {
+    setError("");
+    setLoading(true);
     createGroupChat({
       users: selectedContacts,
       groupName: groupName,
       isPrivate: selectedContacts.length < 1,
-    });
+    })
+      .then((res) => {
+        const groupId = res;
+        setLoading(false);
+        setIsModalVisible(false);
+        handleShowCreateConversation();
+      })
+      .catch((err) => {
+        console.log(err);
+        setLoading(false);
+        setError(err);
+      });
   };
 
   let classname = "create-conversation";
@@ -167,13 +182,18 @@ export default function CreateConversation(props: Props) {
         visible={isModalVisible}
         onCancel={handleModalHide}
         onOk={handleCreateGroup}
-        okText="Create Group"
+        okText="Create Conversation"
+        confirmLoading={loading}
       >
         <Input
           type="text"
           placeholder="What's the group's subject?"
           onChange={handleGroupOnChange}
+          style={{ marginBottom: 6 }}
         />
+        {error && (
+          <span style={{ fontSize: "0.8rem", color: "red" }}>{error}</span>
+        )}
       </Modal>
     </>
   );

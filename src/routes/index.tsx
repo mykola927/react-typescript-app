@@ -8,12 +8,14 @@ import SignIn from "../views/SignIn";
 import { auth } from "../firebase";
 
 export default function Routes() {
+  const [user, setUser] = useState(null as any);
   const [authState, setAuthState] = useState(false);
 
   useEffect(() => {
     auth.onAuthStateChanged((user) => {
       if (user) {
         setAuthState(true);
+        setUser(user);
       } else {
         setAuthState(false);
       }
@@ -22,7 +24,13 @@ export default function Routes() {
 
   return (
     <Switch>
-      <PrivateRoute exact path="/" component={Chat} authState={authState} />
+      <PrivateRoute
+        exact
+        path="/"
+        component={Chat}
+        authState={authState}
+        user={user}
+      />
       <PublicRoute
         exact
         path="/sign-up"

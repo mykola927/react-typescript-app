@@ -1,20 +1,16 @@
 import React, { useState } from "react";
-import { fetchGroups } from "../../firebase/groups";
+import {
+  ConversationInterface,
+  ContactInterface,
+} from "../../common/interfaces";
 import CreateConversation from "../CreateConversation";
 import ConversationCard from "../../components/ConversationCard";
 import { Button } from "antd";
 import "./styles.scss";
-
-interface Contacts {
-  photoURL: string;
-  contactName: string;
-  uid: string;
-}
-
 interface Props {
-  contacts: Contacts[];
-  groupsChats: any[];
-  handleSelectChat: (chat: any) => void;
+  contacts: ContactInterface[];
+  conversations: ConversationInterface[];
+  handleSelectChat: (chat?: any) => void;
 }
 
 export default function ConversationsTab(props: Props) {
@@ -24,18 +20,18 @@ export default function ConversationsTab(props: Props) {
     setCreatingGroup(!creatingGroup);
   };
 
-  const { contacts, groupsChats, handleSelectChat } = props;
+  const { contacts, conversations, handleSelectChat } = props;
   return (
     <>
       <div className="conversations-tab">
         <div className="conversations-list">
-          {groupsChats?.map((group, index) => {
+          {conversations?.map((conv, index) => {
             return (
               <ConversationCard
                 key={index}
-                conversationName={group.groupName}
-                conversationId={group.id}
-                onClick={() => handleSelectChat(group)}
+                conversationName={conv.groupName}
+                conversationId={conv.id}
+                onClick={() => handleSelectChat(conv)}
               />
             );
           })}
@@ -46,6 +42,7 @@ export default function ConversationsTab(props: Props) {
         contacts={contacts}
         creatingGroup={creatingGroup}
         handleShowCreateConversation={handleShowCreateConversation}
+        handleSelectChat={handleSelectChat}
       />
     </>
   );

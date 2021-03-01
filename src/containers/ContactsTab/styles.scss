@@ -2,6 +2,13 @@
   display: flex;
   height: 100%;
   flex-direction: column;
+  &__welcome-card {
+    padding: 16px;
+    > div {
+      padding: 16px;
+      border: 1px solid #ccc;
+    }
+  }
   .contact-list {
     overflow-y: auto;
     .contact-card {
@@ -12,9 +19,15 @@
       }
     }
   }
+  .account-id {
+    margin-top: auto;
+    padding: 12px 16px;
+    border-top: 1px solid #ccc;
+    text-align: center;
+  }
   .ant-btn {
     position: relative;
-    margin: auto -1px -1px -1px;
+    margin: 0 -1px -1px -1px;
     padding: 16px 0;
     height: 63px;
     z-index: 100;

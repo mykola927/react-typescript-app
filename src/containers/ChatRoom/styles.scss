@@ -19,6 +19,18 @@
       height: 59px;
       padding: 0 16px;
       border-bottom: 1px solid #ccc;
+      > span {
+        font-size: 1rem;
+        font-weight: 500;
+        margin-right: auto;
+      }
+      > .ant-btn-group {
+        > button {
+          border: none;
+          box-shadow: none;
+          border-radius: 50px !important;
+        }
+      }
     }
     > main {
       z-index: 1;

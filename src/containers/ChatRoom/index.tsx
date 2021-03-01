@@ -1,18 +1,21 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useCollectionData } from "react-firebase-hooks/firestore";
-import { firestore, firebase } from "../../firebase";
+import { firestore } from "../../firebase";
 import { createMessage } from "../../firebase/messages";
+import { deleteGroup } from "../../firebase/groups";
 import ChatMessage from "../../components/ChatMessage";
-import { Input, Button } from "antd";
+import { Input, Button, Menu, Dropdown } from "antd";
+import { MoreOutlined } from "@ant-design/icons";
 import "./styles.scss";
 
 interface Props {
   selectedChat: any;
+  handleSelectChat: (chat: any) => void;
 }
 
 export default function ChatRoom(props: Props) {
   const [messageText, setMessageText] = useState("");
-  const { selectedChat } = props;
+  const { selectedChat, handleSelectChat } = props;
 
   const messagesRef = firestore.collection("messages");
   const query = messagesRef
@@ -50,10 +53,33 @@ export default function ChatRoom(props: Props) {
       dummy.current.scrollIntoView({ behavior: "smooth" });
     }
   };
+
+  const menu = (
+    <Menu>
+      <Menu.Item key="1">Edit group name</Menu.Item>
+      <Menu.Item key="2">Change group icon</Menu.Item>
+      <Menu.Item
+        key="3"
+        onClick={() => {
+          deleteGroup(selectedChat.id);
+          handleSelectChat(null);
+        }}
+      >
+        Exit group
+      </Menu.Item>
+    </Menu>
+  );
+
   return (
     <div className="chat-container">
       <div className="chat-container__background">
-        <header>{selectedChat.groupName}</header>
+        <header>
+          <span>{selectedChat.groupName}</span>
+          <Dropdown.Button
+            overlay={menu}
+            icon={<MoreOutlined style={{ fontSize: "1.65rem" }} />}
+          />
+        </header>
         <main>
           <div>
             {messages?.map((msg: any, index) => {

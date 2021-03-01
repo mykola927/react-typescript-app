@@ -40,26 +40,87 @@ interface GroupChatParams {
   isPrivate: boolean;
 }
 
-export const createGroupChat = ({
+export const createGroupChat = async ({
   users,
   groupName,
   isPrivate,
 }: GroupChatParams) => {
   const currentUser = getCurrentUser();
+
   if (currentUser) {
-    const usersUid = users.map((item) => item.uid);
-    usersUid.push(currentUser.uid);
+    var alreadyExists = false;
+    const groupRef = await groupsRef
+      .where("createdBy", "==", currentUser.uid)
+      .where("groupName", "==", groupName)
+      .get();
 
-    const group = {
-      users: usersUid,
-      createdBy: currentUser.uid,
-      groupName,
-      isPrivate,
-      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-    };
+    // check if group already exists
+    groupRef.forEach((doc) => {
+      const group = doc.data();
 
-    console.log(group);
+      if (group) {
+        alreadyExists = true;
+      }
+    });
 
-    groupsRef.add(group);
+    if (alreadyExists) {
+      throw "A conversation already exists with this name, try a different one";
+    } else {
+      const usersUid = users.map((item) => item.uid);
+      usersUid.push(currentUser.uid);
+
+      const groupData = {
+        users: usersUid,
+        createdBy: currentUser.uid,
+        groupName,
+        isPrivate,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+      };
+
+      console.log(groupData);
+
+      return await groupsRef
+        .add(groupData)
+        .then((res) => {
+          return res.id;
+        })
+        .catch(() => {
+          throw "Error in creating a conversation";
+        });
+    }
+  }
+};
+
+// interface deleteGroupProps {
+//   groupId: string;
+//   userId: string;
+// }
+
+export const deleteGroup = async (groupId: string) => {
+  const currentUser = getCurrentUser();
+
+  if (currentUser) {
+    return await groupsRef
+      .doc(groupId)
+      .get()
+      .then(async (res) => {
+        const groupData = res.data();
+
+        if (groupData) {
+          if (groupData.createdBy === currentUser.uid) {
+            await groupsRef.doc(groupId).delete();
+          } else {
+            const updatedGroupUsers = groupData.users.filter(
+              (item: string) => item !== currentUser.uid
+            );
+
+            return await groupsRef
+              .doc(groupId)
+              .set({ users: updatedGroupUsers }, { merge: true });
+          }
+        } else {
+          return "No group found";
+        }
+      });
   }
 };
