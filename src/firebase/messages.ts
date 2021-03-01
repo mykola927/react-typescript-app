@@ -19,8 +19,6 @@ export const createMessage = ({ text, groupId }: Message) => {
       createdAt: firebase.firestore.FieldValue.serverTimestamp(),
     };
 
-    console.log(message);
-
     messagesRef.add(message).then((snap) => console.log(snap));
   }
 };

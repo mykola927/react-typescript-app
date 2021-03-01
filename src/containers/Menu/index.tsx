@@ -1,11 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { auth } from "../../firebase";
-import {
-  ConversationInterface,
-  ContactInterface,
-} from "../../common/interfaces";
-import { fetchUserData, fetchContacts } from "../../firebase/users";
-import { fetchGroups, deleteGroup } from "../../firebase/groups";
+import { ContactInterface } from "../../common/interfaces";
+
 import ContactsTab from "../ContactsTab";
 import ConversationsTab from "../ConversationsTab";
 import { Button, Tabs, Dropdown, Menu } from "antd";
@@ -13,25 +9,17 @@ import { MoreOutlined } from "@ant-design/icons";
 import "./styles.scss";
 
 interface Props {
+  user: any;
   contacts: ContactInterface[];
   conversations: any;
   handleSelectChat: (chat: any) => void;
 }
 
 export default function MenuContent(props: Props) {
-  const [user, setUser] = useState(null as any);
   const [toFetchContacts, setToFetchContacts] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
 
   // Get all groups
-  useEffect(() => {
-    fetchUserData().then((res) => {
-      if (res) {
-        setUser(res);
-        console.log(res);
-      }
-    });
-  }, []);
 
   const handleModalShow = () => {
     setIsModalVisible(true);
@@ -48,7 +36,7 @@ export default function MenuContent(props: Props) {
     </Menu>
   );
 
-  const { contacts, conversations, handleSelectChat } = props;
+  const { contacts, conversations, handleSelectChat, user } = props;
   const { currentUser } = auth;
 
   return (

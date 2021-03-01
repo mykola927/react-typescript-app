@@ -7,7 +7,7 @@
     .message__content {
       background-color: rgb(255, 177, 74);
       &__text {
-        padding: 8px 8px 0 12px;
+        padding: 0px 8px 0 12px;
       }
       &__at {
         padding: 0 8px 0 16px;
@@ -19,7 +19,7 @@
       background: #f1f1f1;
       color: #252525;
       &__text {
-        padding: 8px 16px 0 8px;
+        padding: 0px 16px 0 8px;
       }
       &__at {
         text-align: right;
@@ -35,6 +35,11 @@
     color: white;
     overflow: hidden;
     word-wrap: break-word;
+    &__sender {
+      margin: 0;
+      padding: 0 8px;
+      font-size: 0.75rem;
+    }
     &__text {
       text-align: left;
     }

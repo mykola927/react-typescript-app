@@ -9,13 +9,15 @@ import { MoreOutlined } from "@ant-design/icons";
 import "./styles.scss";
 
 interface Props {
+  user: any;
   selectedChat: any;
+  contacts: any;
   handleSelectChat: (chat: any) => void;
 }
 
 export default function ChatRoom(props: Props) {
   const [messageText, setMessageText] = useState("");
-  const { selectedChat, handleSelectChat } = props;
+  const { selectedChat, handleSelectChat, contacts, user } = props;
 
   const messagesRef = firestore.collection("messages");
   const query = messagesRef
@@ -88,8 +90,10 @@ export default function ChatRoom(props: Props) {
                   <ChatMessage
                     key={index}
                     text={msg.text}
-                    uid={msg.createdBy}
+                    createdBy={msg.createdBy}
                     createdAt={msg.createdAt}
+                    contacts={contacts}
+                    user={user}
                   />
                 </>
               );

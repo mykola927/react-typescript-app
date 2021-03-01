@@ -1,15 +1,24 @@
 import React, { useState, useEffect } from "react";
 import { useCollectionData } from "react-firebase-hooks/firestore";
 import { firestore, auth } from "../../firebase";
-import { deleteGroup } from "../../firebase/groups";
-import { fetchContacts } from "../../firebase/users";
+import { fetchContacts, fetchUserData } from "../../firebase/users";
 import Menu from "../../containers/Menu";
 import ChatRoom from "../../containers/ChatRoom";
 import "./styles.scss";
 
 export default function Chat() {
+  const [user, setUser] = useState(null as any);
   const [contacts, setContacts] = useState([]);
   const [selectedChat, setSelectedChat] = useState(null);
+
+  useEffect(() => {
+    fetchUserData().then((res) => {
+      if (res) {
+        setUser(res);
+        console.log(res);
+      }
+    });
+  }, []);
 
   const groupsRef = firestore.collection("groups");
   const query = groupsRef.where(
@@ -39,6 +48,7 @@ export default function Chat() {
       <div className="app-container">
         <div className="app-container__menu">
           <Menu
+            user={user}
             contacts={contacts}
             conversations={conversations}
             handleSelectChat={handleSelectChat}
@@ -48,6 +58,8 @@ export default function Chat() {
           {selectedChat ? (
             <>
               <ChatRoom
+                user={user}
+                contacts={contacts}
                 selectedChat={selectedChat}
                 handleSelectChat={handleSelectChat}
               />
