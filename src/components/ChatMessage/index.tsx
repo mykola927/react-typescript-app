@@ -30,15 +30,17 @@ export default function ChatMessage(props: Props) {
 
   return (
     <>
-      <div className={`message ${messageType}`}>
-        <div className="message__content">
-          <div className="message__content__sender">{senderName}</div>
-          <div className="message__content__text">{text}</div>
-          <p className="message__content__at">
-            {createdAt && toDateTime(createdAt.seconds)}
-          </p>
+      {createdAt && (
+        <div className={`message ${messageType}`}>
+          <div className="message__content">
+            <div className="message__content__sender">{senderName}</div>
+            <div className="message__content__text">{text}</div>
+            <p className="message__content__at">
+              {createdAt && toDateTime(createdAt.seconds)}
+            </p>
+          </div>
         </div>
-      </div>
+      )}
     </>
   );
 }

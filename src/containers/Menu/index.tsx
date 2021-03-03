@@ -86,23 +86,30 @@ export default function MenuContent(props: Props) {
       ) : (
         <div className="app-container__menu__content">
           <header>
-            <Button
-              onClick={() => console.log(currentUser)}
-              shape="circle"
-              style={{
-                height: "40px",
-                width: "40px",
-                backgroundImage: `url(${profileImage})`,
-                backgroundSize: "cover",
-                backgroundPosition: "center",
-              }}
-            >
-              {user && (
-                <>
-                  {profileImage ? " " : `${user.displayName[0].toUpperCase()}`}
-                </>
-              )}
-            </Button>
+            <div style={{ display: "flex", alignItems: "center" }}>
+              <Button
+                onClick={() => console.log(currentUser)}
+                shape="circle"
+                style={{
+                  height: "40px",
+                  width: "40px",
+                  backgroundImage: `url(${profileImage})`,
+                  backgroundSize: "cover",
+                  backgroundPosition: "center",
+                }}
+              >
+                {user && (
+                  <>
+                    {profileImage
+                      ? " "
+                      : `${user.displayName[0].toUpperCase()}`}
+                  </>
+                )}
+              </Button>
+              <span style={{ marginLeft: "12px", fontWeight: 500 }}>
+                {user.displayName}
+              </span>
+            </div>
 
             <Dropdown.Button
               overlay={menu}

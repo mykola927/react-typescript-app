@@ -77,7 +77,20 @@ export default function Chat() {
                 />
               </>
             ) : (
-              "Select a chat "
+              <div
+                style={{
+                  height: "100%",
+                  width: "100%",
+                  display: "flex",
+                  padding: "32px 20% 32px 32px",
+                  alignItems: "center",
+                  fontSize: "1rem",
+                  fontWeight: 500,
+                }}
+              >
+                Pick an existing conversation or create a new one to start
+                chatting away
+              </div>
             )}
           </div>
         </div>
