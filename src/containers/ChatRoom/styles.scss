@@ -19,6 +19,15 @@
       height: 59px;
       padding: 0 16px;
       border-bottom: 1px solid #ccc;
+      > .image {
+        height: 42px;
+        width: 42px;
+        line-height: 42px;
+        text-align: center;
+        margin-right: 16px;
+        background-color: #f1f1f1;
+        border-radius: 50%;
+      }
       > span {
         font-size: 1rem;
         font-weight: 500;

@@ -2,8 +2,13 @@ import React, { useState, useEffect, useRef } from "react";
 import { useCollectionData } from "react-firebase-hooks/firestore";
 import { firestore } from "../../firebase";
 import { createMessage } from "../../firebase/messages";
-import { deleteGroup, changeGroupName } from "../../firebase/groups";
+import {
+  deleteGroup,
+  changeGroupName,
+  removeGroupImage,
+} from "../../firebase/groups";
 import ChatMessage from "../../components/ChatMessage";
+import UploadConversationImage from "../UploadConversationImage";
 import { Input, Button, Menu, Dropdown, Modal } from "antd";
 import { MoreOutlined } from "@ant-design/icons";
 import "./styles.scss";
@@ -18,10 +23,11 @@ interface Props {
 export default function ChatRoom(props: Props) {
   const [messageText, setMessageText] = useState("");
   const [editGroupName, setEditGroupName] = useState(false);
+  const [editGroupImage, setEditGroupImage] = useState(false);
   const [groupName, setGroupName] = useState("");
   const [loading, setLoading] = useState(false);
-  const { selectedChat, handleSelectChat, contacts, user } = props;
 
+  const { selectedChat, handleSelectChat, contacts, user } = props;
   const messagesRef = firestore.collection("messages");
   const query = messagesRef
     .where("groupId", "==", selectedChat.id)
@@ -80,6 +86,10 @@ export default function ChatRoom(props: Props) {
       });
   };
 
+  const handleChangingGroupImage = () => {
+    setEditGroupImage(!editGroupImage);
+  };
+
   const menu = (
     <Menu>
       <Menu.Item
@@ -90,9 +100,24 @@ export default function ChatRoom(props: Props) {
       >
         Edit group name
       </Menu.Item>
-      <Menu.Item key="2">Change group icon</Menu.Item>
+      <Menu.Item
+        key="2"
+        onClick={() => {
+          handleChangingGroupImage();
+        }}
+      >
+        Change group icon
+      </Menu.Item>
       <Menu.Item
         key="3"
+        onClick={() => {
+          removeGroupImage(selectedChat.id);
+        }}
+      >
+        Remove group icon
+      </Menu.Item>
+      <Menu.Item
+        key="4"
         onClick={() => {
           deleteGroup(selectedChat.id);
           handleSelectChat(null);
@@ -108,6 +133,16 @@ export default function ChatRoom(props: Props) {
       <div className="chat-container">
         <div className="chat-container__background">
           <header>
+            <div
+              className="image"
+              style={{
+                backgroundImage: `url('${selectedChat.photoURL}')`,
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+              }}
+            >
+              {selectedChat.photoURL ? "" : selectedChat.groupName[0]}
+            </div>
             <span>{selectedChat.groupName}</span>
             <Dropdown.Button
               overlay={menu}
@@ -118,16 +153,14 @@ export default function ChatRoom(props: Props) {
             <div>
               {messages?.map((msg: any, index) => {
                 return (
-                  <>
-                    <ChatMessage
-                      key={index}
-                      text={msg.text}
-                      createdBy={msg.createdBy}
-                      createdAt={msg.createdAt}
-                      contacts={contacts}
-                      user={user}
-                    />
-                  </>
+                  <ChatMessage
+                    key={index}
+                    text={msg.text}
+                    createdBy={msg.createdBy}
+                    createdAt={msg.createdAt}
+                    contacts={contacts}
+                    user={user}
+                  />
                 );
               })}
               <div ref={dummy} />
@@ -161,6 +194,12 @@ export default function ChatRoom(props: Props) {
           onChange={handleGroupNameInputOnChange}
         />
       </Modal>
+
+      <UploadConversationImage
+        selectedChat={selectedChat}
+        isVisible={editGroupImage}
+        handleChangingGroupImage={handleChangingGroupImage}
+      />
     </>
   );
 }

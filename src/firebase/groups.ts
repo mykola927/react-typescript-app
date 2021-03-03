@@ -3,33 +3,6 @@ import { getCurrentUser } from "./users";
 
 const groupsRef = firestore.collection("groups");
 
-export const fetchGroups = async () => {
-  var groups: any = [];
-  const currentUser = getCurrentUser();
-  if (currentUser) {
-    await groupsRef
-      .get()
-      .then((snapshot) => {
-        snapshot.forEach((doc) => {
-          const group = doc.data();
-          group.id = doc.id;
-          if (group.users.includes(currentUser.uid)) {
-            groups.push(group);
-            console.log(group);
-          }
-        });
-      })
-      .catch((err) => console.error(err));
-  }
-
-  if (groups.length > 0) {
-    console.log(groups);
-    return groups;
-  } else {
-    console.log("no groups found");
-  }
-};
-
 interface GroupUsers {
   uid: string;
 }
@@ -127,5 +100,23 @@ export const changeGroupName = async (groupId: string, groupName: string) => {
   if (currentUser) {
     const groupRef = groupsRef.doc(groupId);
     groupRef.set({ groupName: groupName }, { merge: true });
+  }
+};
+
+export const updateGroupImage = async (groupId: string, groupImage: string) => {
+  const currentUser = getCurrentUser();
+
+  if (currentUser) {
+    const groupRef = groupsRef.doc(groupId);
+    groupRef.set({ photoURL: groupImage }, { merge: true });
+  }
+};
+
+export const removeGroupImage = async (groupId: string) => {
+  const currentUser = getCurrentUser();
+
+  if (currentUser) {
+    const groupRef = groupsRef.doc(groupId);
+    groupRef.set({ photoURL: "" }, { merge: true });
   }
 };

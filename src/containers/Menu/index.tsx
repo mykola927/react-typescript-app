@@ -62,10 +62,10 @@ export default function MenuContent(props: Props) {
       <Menu.Item key="1" onClick={handleChangeProfileImage}>
         Change profile image
       </Menu.Item>
-      <Menu.Item key="1" onClick={handleRemoveProfileImage}>
+      <Menu.Item key="2" onClick={handleRemoveProfileImage}>
         Remove profile image
       </Menu.Item>
-      <Menu.Item key="2" onClick={() => auth.signOut()}>
+      <Menu.Item key="3" onClick={() => auth.signOut()}>
         Sign out
       </Menu.Item>
     </Menu>
