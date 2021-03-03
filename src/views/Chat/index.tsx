@@ -56,30 +56,32 @@ export default function Chat() {
 
   return (
     <div className="wrapper">
-      <div className="app-container">
-        <div className="app-container__menu">
-          <Menu
-            user={user}
-            contacts={contacts}
-            conversations={conversations}
-            handleSelectChat={handleSelectChat}
-          />
+      {user && (
+        <div className="app-container">
+          <div className="app-container__menu">
+            <Menu
+              user={user}
+              contacts={contacts}
+              conversations={conversations}
+              handleSelectChat={handleSelectChat}
+            />
+          </div>
+          <div className="app-container__content">
+            {selectedChat ? (
+              <>
+                <ChatRoom
+                  user={user}
+                  contacts={contacts}
+                  selectedChat={selectedChat}
+                  handleSelectChat={handleSelectChat}
+                />
+              </>
+            ) : (
+              "Select a chat "
+            )}
+          </div>
         </div>
-        <div className="app-container__content">
-          {selectedChat ? (
-            <>
-              <ChatRoom
-                user={user}
-                contacts={contacts}
-                selectedChat={selectedChat}
-                handleSelectChat={handleSelectChat}
-              />
-            </>
-          ) : (
-            "Select a chat "
-          )}
-        </div>
-      </div>
+      )}
     </div>
   );
 }

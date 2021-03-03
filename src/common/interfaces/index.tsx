@@ -8,5 +8,6 @@ export interface ConversationInterface {
   id: string;
   groupName: string;
   createdBy: string;
+  photoURL: string;
   users: string[];
 }

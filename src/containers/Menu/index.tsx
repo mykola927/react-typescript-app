@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { auth } from "../../firebase";
+import { auth, storage } from "../../firebase";
+import { removeProfileImage } from "../../firebase/users";
 import { ContactInterface } from "../../common/interfaces";
-
+import UploadProfileImage from "../UploadProfileImage";
 import ContactsTab from "../ContactsTab";
 import ConversationsTab from "../ConversationsTab";
 import { Button, Tabs, Dropdown, Menu } from "antd";
@@ -17,18 +18,52 @@ interface Props {
 
 export default function MenuContent(props: Props) {
   const [toFetchContacts, setToFetchContacts] = useState(false);
-  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [changingProfileImage, setChangingProfileImage] = useState(false);
+  const [profileImage, setProfileImage] = useState("" as any);
+  const [loading, setLoading] = useState(false);
 
-  // Get all groups
+  const { contacts, conversations, handleSelectChat, user } = props;
+  const { currentUser } = auth;
 
-  const handleModalShow = () => {
-    setIsModalVisible(true);
+  useEffect(() => {
+    setLoading(true);
+    console.log("happening");
+    storage
+      .ref()
+      .child(user.photoURL)
+      .getDownloadURL()
+      .then((url) => {
+        setProfileImage(url);
+        console.log(url);
+        console.log(user);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.log(err);
+        setLoading(false);
+      });
+  }, []);
+
+  const handleChangeProfileImage = () => {
+    setChangingProfileImage(!changingProfileImage);
+  };
+
+  const handleUpdateProfileImage = (updatedImage: string) => {
+    setProfileImage(updatedImage);
+  };
+
+  const handleRemoveProfileImage = () => {
+    setProfileImage(null);
+    removeProfileImage();
   };
 
   const menu = (
     <Menu>
-      <Menu.Item key="1" onClick={handleModalShow}>
+      <Menu.Item key="1" onClick={handleChangeProfileImage}>
         Change profile image
+      </Menu.Item>
+      <Menu.Item key="1" onClick={handleRemoveProfileImage}>
+        Remove profile image
       </Menu.Item>
       <Menu.Item key="2" onClick={() => auth.signOut()}>
         Sign out
@@ -36,55 +71,71 @@ export default function MenuContent(props: Props) {
     </Menu>
   );
 
-  const { contacts, conversations, handleSelectChat, user } = props;
-  const { currentUser } = auth;
-
   return (
     <>
-      <div className="app-container__menu__content">
-        <header>
-          <Button
-            onClick={() => console.log(currentUser)}
-            shape="circle"
-            style={{
-              height: "40px",
-              width: "40px",
-              backgroundImage: `url(${user?.photoURL})`,
-              backgroundSize: "contain",
-            }}
-          >
-            {user && (
-              <>
-                {user.photoURL ? " " : `${user.displayName[0].toUpperCase()}`}
-              </>
-            )}
-          </Button>
+      {loading ? (
+        <Button
+          loading
+          shape="circle"
+          style={{
+            position: "absolute",
+            left: "45%",
+            top: "20%",
+          }}
+        />
+      ) : (
+        <div className="app-container__menu__content">
+          <header>
+            <Button
+              onClick={() => console.log(currentUser)}
+              shape="circle"
+              style={{
+                height: "40px",
+                width: "40px",
+                backgroundImage: `url(${profileImage})`,
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+              }}
+            >
+              {user && (
+                <>
+                  {profileImage ? " " : `${user.displayName[0].toUpperCase()}`}
+                </>
+              )}
+            </Button>
 
-          <Dropdown.Button
-            overlay={menu}
-            icon={<MoreOutlined style={{ fontSize: "1.65rem" }} />}
-          />
-        </header>
-        <div className="tabs-container">
-          <Tabs defaultActiveKey="1" centered>
-            <Tabs.TabPane tab="Coversations" key="1">
-              <ConversationsTab
-                contacts={contacts}
-                conversations={conversations}
-                handleSelectChat={handleSelectChat}
-              />
-            </Tabs.TabPane>
-            <Tabs.TabPane tab="Contacts" key="2">
-              <ContactsTab
-                user={user}
-                contacts={contacts}
-                setToFetchContacts={setToFetchContacts}
-                toFetchContacts={toFetchContacts}
-              />
-            </Tabs.TabPane>
-          </Tabs>
+            <Dropdown.Button
+              overlay={menu}
+              icon={<MoreOutlined style={{ fontSize: "1.65rem" }} />}
+            />
+          </header>
+          <div className="tabs-container">
+            <Tabs defaultActiveKey="1" centered>
+              <Tabs.TabPane tab="Coversations" key="1">
+                <ConversationsTab
+                  contacts={contacts}
+                  conversations={conversations}
+                  handleSelectChat={handleSelectChat}
+                />
+              </Tabs.TabPane>
+              <Tabs.TabPane tab="Contacts" key="2">
+                <ContactsTab
+                  user={user}
+                  contacts={contacts}
+                  setToFetchContacts={setToFetchContacts}
+                  toFetchContacts={toFetchContacts}
+                />
+              </Tabs.TabPane>
+            </Tabs>
+          </div>
         </div>
-      </div>
+      )}
+
+      <UploadProfileImage
+        isVisible={changingProfileImage}
+        handleChangeProfileImage={handleChangeProfileImage}
+        handleUpdateProfileImage={handleUpdateProfileImage}
+      />
     </>
   );
 }

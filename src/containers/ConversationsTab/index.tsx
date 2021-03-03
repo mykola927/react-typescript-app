@@ -30,6 +30,7 @@ export default function ConversationsTab(props: Props) {
               <ConversationCard
                 key={index}
                 conversationName={conv.groupName}
+                conversationImage={conv.photoURL}
                 conversationId={conv.id}
                 onClick={() => handleSelectChat(conv)}
               />

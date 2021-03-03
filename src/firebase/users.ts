@@ -1,4 +1,4 @@
-import { firestore, firebase, auth } from "../firebase";
+import { firestore, firebase, auth, storage } from "../firebase";
 
 const usersRef = firestore.collection("users");
 
@@ -105,15 +105,23 @@ export const fetchContacts = async () => {
         if (data) {
           await usersRef
             .get()
-            .then((snapshot) => {
-              snapshot.forEach((doc) => {
+            .then(async (snapshot) => {
+              snapshot.forEach(async (doc) => {
                 const contactData = doc.data();
                 const contactIndex = data.contacts.findIndex(
                   (contact: any) => contact.uid === contactData.uid
                 );
 
                 if (contactIndex !== -1) {
-                  data.contacts[contactIndex].photoURL = contactData.photoURL;
+                  const photo = contactData.photoURL;
+                  await storage
+                    .ref()
+                    .child(photo)
+                    .getDownloadURL()
+                    .then((url) => {
+                      data.contacts[contactIndex].photoURL = url;
+                    })
+                    .catch((err) => console.log(err));
                 }
               });
             })
@@ -122,5 +130,23 @@ export const fetchContacts = async () => {
           return data.contacts;
         }
       });
+  }
+};
+
+export const updateProfileImage = async (profileImage: string) => {
+  const currentUser = getCurrentUser();
+
+  if (currentUser) {
+    const userRef = usersRef.doc(currentUser.uid);
+    userRef.set({ photoURL: profileImage }, { merge: true });
+  }
+};
+
+export const removeProfileImage = async () => {
+  const currentUser = getCurrentUser();
+
+  if (currentUser) {
+    const userRef = usersRef.doc(currentUser.uid);
+    userRef.set({ photoURL: "" }, { merge: true });
   }
 };

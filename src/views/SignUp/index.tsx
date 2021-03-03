@@ -42,7 +42,7 @@ export default function SignUp() {
                 displayName: displayName,
                 email,
                 contacts: [],
-                photoUrl: "",
+                photoURL: "",
               })
               .then(() => {
                 setLoading(false);

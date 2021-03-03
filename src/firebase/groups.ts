@@ -74,6 +74,7 @@ export const createGroupChat = async ({
         createdBy: currentUser.uid,
         groupName,
         isPrivate,
+        photoURL: "",
         createdAt: firebase.firestore.FieldValue.serverTimestamp(),
       };
 
