@@ -4,10 +4,6 @@
   flex-direction: row;
   // pointer-events: all;
   transition: background-color 100ms ease-in;
-  &:hover {
-    background-color: #f4f4f4;
-    cursor: pointer;
-  }
   &__image {
     padding: 0 15px 0 13px;
     display: flex;
@@ -17,7 +13,7 @@
       font-weight: 500;
       height: 49px;
       width: 49px;
-      background-color: #ccc;
+      background-color: #eee;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -31,5 +27,21 @@
     font-size: 1rem;
     padding-right: 15px;
     border-top: 1px solid #eee;
+    > button {
+      padding: 0 !important;
+      height: 32px !important;
+      width: 32px !important;
+      display: none;
+    }
+  }
+}
+
+.contact-card:hover {
+  background-color: #f9f9f9;
+  cursor: pointer;
+  .contact-card__name {
+    > button {
+      display: inline;
+    }
   }
 }
