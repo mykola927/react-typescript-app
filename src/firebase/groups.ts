@@ -91,11 +91,6 @@ export const createGroupChat = async ({
   }
 };
 
-// interface deleteGroupProps {
-//   groupId: string;
-//   userId: string;
-// }
-
 export const deleteGroup = async (groupId: string) => {
   const currentUser = getCurrentUser();
 
@@ -122,5 +117,14 @@ export const deleteGroup = async (groupId: string) => {
           return "No group found";
         }
       });
+  }
+};
+
+export const changeGroupName = async (groupId: string, groupName: string) => {
+  const currentUser = getCurrentUser();
+
+  if (currentUser) {
+    const groupRef = groupsRef.doc(groupId);
+    groupRef.set({ groupName: groupName }, { merge: true });
   }
 };

@@ -2,9 +2,9 @@ import React, { useState, useEffect, useRef } from "react";
 import { useCollectionData } from "react-firebase-hooks/firestore";
 import { firestore } from "../../firebase";
 import { createMessage } from "../../firebase/messages";
-import { deleteGroup } from "../../firebase/groups";
+import { deleteGroup, changeGroupName } from "../../firebase/groups";
 import ChatMessage from "../../components/ChatMessage";
-import { Input, Button, Menu, Dropdown } from "antd";
+import { Input, Button, Menu, Dropdown, Modal } from "antd";
 import { MoreOutlined } from "@ant-design/icons";
 import "./styles.scss";
 
@@ -17,6 +17,9 @@ interface Props {
 
 export default function ChatRoom(props: Props) {
   const [messageText, setMessageText] = useState("");
+  const [editGroupName, setEditGroupName] = useState(false);
+  const [groupName, setGroupName] = useState("");
+  const [loading, setLoading] = useState(false);
   const { selectedChat, handleSelectChat, contacts, user } = props;
 
   const messagesRef = firestore.collection("messages");
@@ -56,9 +59,37 @@ export default function ChatRoom(props: Props) {
     }
   };
 
+  const handleGroupNameInputOnChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setGroupName(event.target.value);
+  };
+
+  const handleChangeNameDialog = () => {
+    setEditGroupName(!editGroupName);
+  };
+
+  const handleGroupNameChange = () => {
+    changeGroupName(selectedChat.id, groupName)
+      .then(() => {
+        setGroupName("");
+        setEditGroupName(false);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   const menu = (
     <Menu>
-      <Menu.Item key="1">Edit group name</Menu.Item>
+      <Menu.Item
+        key="1"
+        onClick={() => {
+          handleChangeNameDialog();
+        }}
+      >
+        Edit group name
+      </Menu.Item>
       <Menu.Item key="2">Change group icon</Menu.Item>
       <Menu.Item
         key="3"
@@ -73,46 +104,63 @@ export default function ChatRoom(props: Props) {
   );
 
   return (
-    <div className="chat-container">
-      <div className="chat-container__background">
-        <header>
-          <span>{selectedChat.groupName}</span>
-          <Dropdown.Button
-            overlay={menu}
-            icon={<MoreOutlined style={{ fontSize: "1.65rem" }} />}
-          />
-        </header>
-        <main>
-          <div>
-            {messages?.map((msg: any, index) => {
-              return (
-                <>
-                  <ChatMessage
-                    key={index}
-                    text={msg.text}
-                    createdBy={msg.createdBy}
-                    createdAt={msg.createdAt}
-                    contacts={contacts}
-                    user={user}
-                  />
-                </>
-              );
-            })}
-            <div ref={dummy} />
-          </div>
-        </main>
-        <footer>
-          <form onSubmit={(e) => e.preventDefault()}>
-            <Input
-              type="text"
-              value={messageText}
-              placeholder="Type a message"
-              onChange={handleMessageOnChange}
+    <>
+      <div className="chat-container">
+        <div className="chat-container__background">
+          <header>
+            <span>{selectedChat.groupName}</span>
+            <Dropdown.Button
+              overlay={menu}
+              icon={<MoreOutlined style={{ fontSize: "1.65rem" }} />}
             />
-            <Button onClick={handleCreateMessage}>Send message</Button>
-          </form>
-        </footer>
+          </header>
+          <main>
+            <div>
+              {messages?.map((msg: any, index) => {
+                return (
+                  <>
+                    <ChatMessage
+                      key={index}
+                      text={msg.text}
+                      createdBy={msg.createdBy}
+                      createdAt={msg.createdAt}
+                      contacts={contacts}
+                      user={user}
+                    />
+                  </>
+                );
+              })}
+              <div ref={dummy} />
+            </div>
+          </main>
+          <footer>
+            <form onSubmit={(e) => e.preventDefault()}>
+              <Input
+                type="text"
+                value={messageText}
+                placeholder="Type a message"
+                onChange={handleMessageOnChange}
+              />
+              <Button onClick={handleCreateMessage}>Send message</Button>
+            </form>
+          </footer>
+        </div>
       </div>
-    </div>
+      <Modal
+        title="New Conversation Subject"
+        visible={editGroupName}
+        onCancel={handleChangeNameDialog}
+        onOk={handleGroupNameChange}
+        okText="Change Subject"
+        confirmLoading={loading}
+      >
+        <Input
+          type="text"
+          placeholder={selectedChat.groupName}
+          style={{ marginBottom: 6 }}
+          onChange={handleGroupNameInputOnChange}
+        />
+      </Modal>
+    </>
   );
 }

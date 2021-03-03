@@ -9,7 +9,7 @@ import "./styles.scss";
 export default function Chat() {
   const [user, setUser] = useState(null as any);
   const [contacts, setContacts] = useState([]);
-  const [selectedChat, setSelectedChat] = useState(null);
+  const [selectedChat, setSelectedChat] = useState(null as any);
 
   useEffect(() => {
     fetchUserData().then((res) => {
@@ -28,6 +28,17 @@ export default function Chat() {
   );
 
   const [conversations] = useCollectionData(query, { idField: "id" });
+
+  useEffect(() => {
+    if (selectedChat) {
+      const updatedSelectedChat = conversations?.find(
+        (elem: any) => elem.id === selectedChat.id
+      );
+      if (updatedSelectedChat) {
+        setSelectedChat(updatedSelectedChat);
+      }
+    }
+  }, [conversations]);
 
   useEffect(() => {
     fetchContacts()
