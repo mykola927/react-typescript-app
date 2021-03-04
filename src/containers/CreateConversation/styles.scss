@@ -13,15 +13,15 @@
     justify-content: flex-end;
     height: 108px;
     padding: 0 20px 0 23px;
-    background-color: #00bfa5;
-    color: #fff;
+    background-color: #fff;
+    color: #555;
     > div {
       display: flex;
       align-items: center;
       flex-direction: row;
       height: 59px;
       .ant-btn {
-        color: #fff;
+        color: #555;
         margin-right: 16px;
       }
       > div {
@@ -49,6 +49,9 @@
         &:nth-child(1) {
           .contact-card__name {
             border: none;
+            > button {
+              display: none !important;
+            }
           }
         }
       }
@@ -62,7 +65,8 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      background-color: rgb(237, 237, 237);
+      // background-color: rgb(237, 237, 237);
+      background-color: #eee;
     }
     .no-contacts {
       text-align: center;

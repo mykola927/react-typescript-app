@@ -21,7 +21,6 @@ export default function ContactsTab(props: Props) {
   const [editingContact, setEditingContact] = useState(false);
   const [selectedContactName, setSelectedContactName] = useState("");
   const [selectedContactId, setselectedContactId] = useState("");
-  const [test, setTest] = useState(false);
 
   const {
     contacts = [],
@@ -45,9 +44,8 @@ export default function ContactsTab(props: Props) {
         <div className="contacts-tab__welcome-card">
           <div>
             Welcome to WhutsApp! a web application based on WhatsApp (what a
-            surprise), Here is your account id: <span>{user.uid}</span>. To
-            start a conversation with a friend, add a contact using your friends
-            account id.
+            surprise). To start a conversation with a friend, add a contact
+            using your friends account id.
           </div>
         </div>
       )}

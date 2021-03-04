@@ -38,21 +38,25 @@ export default function MenuContent(props: Props) {
 
   useEffect(() => {
     setLoading(true);
-    console.log("happening");
-    storage
-      .ref()
-      .child(user.photoURL)
-      .getDownloadURL()
-      .then((url) => {
-        setProfileImage(url);
-        console.log(url);
-        console.log(user);
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.log(err);
-        setLoading(false);
-      });
+    if (!user.photoURL.includes("http")) {
+      storage
+        .ref()
+        .child(user.photoURL)
+        .getDownloadURL()
+        .then((url) => {
+          setProfileImage(url);
+          console.log(url);
+          console.log(user);
+          setLoading(false);
+        })
+        .catch((err) => {
+          console.log(err);
+          setLoading(false);
+        });
+    } else {
+      setProfileImage(user.photoURL);
+      setLoading(false);
+    }
   }, []);
 
   const handleChangeProfileImage = () => {

@@ -4,7 +4,6 @@ import { firestore, auth } from "../../firebase";
 import {
   addContact,
   fetchContacts,
-  fetchUserData,
   removeContact,
   updateContactName,
 } from "../../firebase/users";
@@ -12,20 +11,10 @@ import Menu from "../../containers/Menu";
 import ChatRoom from "../../containers/ChatRoom";
 import "./styles.scss";
 
-export default function Chat() {
-  const [user, setUser] = useState(null as any);
+export default function Chat(props: any) {
   const [contacts, setContacts] = useState([]);
-  const [toFetchContacts, setToFetchContacts] = useState(false);
   const [selectedChat, setSelectedChat] = useState(null as any);
-
-  useEffect(() => {
-    fetchUserData().then((res) => {
-      if (res) {
-        setUser(res);
-        console.log(res);
-      }
-    });
-  }, []);
+  const { user } = props;
 
   const groupsRef = firestore.collection("groups");
   const query = groupsRef.where(

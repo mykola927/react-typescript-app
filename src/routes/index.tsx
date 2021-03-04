@@ -7,6 +7,7 @@ import Chat from "../views/Chat";
 import SignIn from "../views/SignIn";
 import { auth } from "../firebase";
 import { Spin } from "antd";
+import { fetchUserData } from "../firebase/users";
 
 export default function Routes() {
   const [user, setUser] = useState(null as any);
@@ -17,9 +18,21 @@ export default function Routes() {
     setLoading(true);
     auth.onAuthStateChanged((user) => {
       if (user) {
-        setAuthState(true);
-        setUser(user);
-        setLoading(false);
+        fetchUserData().then((res) => {
+          if (res) {
+            setUser(res);
+            setAuthState(true);
+            setLoading(false);
+          } else {
+            fetchUserData().then((res) => {
+              if (res) {
+                setUser(res);
+                setAuthState(true);
+                setLoading(false);
+              }
+            });
+          }
+        });
       } else {
         setAuthState(false);
         setLoading(false);

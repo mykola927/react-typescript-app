@@ -37,14 +37,22 @@ export const fetchUserData = async () => {
   const currentUser = getCurrentUser();
 
   if (currentUser) {
+    console.log(currentUser.uid);
     return await usersRef
       .doc(currentUser.uid)
       .get()
       .then(async (doc) => {
         const data = doc.data();
+        console.log(doc.data());
         if (data) {
           return data;
+        } else {
+          fetchUserData();
         }
+      })
+      .catch((err) => {
+        console.log(err);
+        throw err;
       });
   }
 };
@@ -71,14 +79,18 @@ export const fetchContacts = async () => {
 
                 if (contactIndex !== -1) {
                   const photo = contactData.photoURL;
-                  await storage
-                    .ref()
-                    .child(photo)
-                    .getDownloadURL()
-                    .then((url) => {
-                      data.contacts[contactIndex].photoURL = url;
-                    })
-                    .catch((err) => console.log(err));
+                  if (!photo.includes("http")) {
+                    await storage
+                      .ref()
+                      .child(photo)
+                      .getDownloadURL()
+                      .then((url) => {
+                        data.contacts[contactIndex].photoURL = url;
+                      })
+                      .catch((err) => console.log(err));
+                  } else {
+                    data.contacts[contactIndex].photoURL = photo;
+                  }
                 }
               });
             })

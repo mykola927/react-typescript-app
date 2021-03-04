@@ -67,25 +67,29 @@ export default function SignUp() {
       .then(async (cred) => {
         if (cred.user) {
           const { uid, email, displayName, photoURL } = cred.user;
-          firestore
-            .collection("users")
-            .doc(uid)
-            .set({
-              uid,
-              email,
-              displayName,
-              photoURL,
-              contacts: [],
-            })
-            .then(() => {
-              setGoogleLoading(false);
-              history.push("/");
-            });
+          const userRef = firestore.collection("users").doc(uid);
+
+          const doesExist = await userRef.get();
+          console.log();
+          if (!doesExist.data()) {
+            await userRef
+              .set({
+                uid,
+                email,
+                displayName,
+                photoURL,
+                contacts: [],
+              })
+              .then(() => {
+                history.push("/");
+              });
+          } else {
+            history.push("/");
+          }
         }
       })
       .catch((error) => {
         console.error(error);
-        setGoogleLoading(false);
       });
   };
 

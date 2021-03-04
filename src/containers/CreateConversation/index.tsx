@@ -152,13 +152,15 @@ export default function CreateConversation(props: Props) {
 
           <div className="contacts-list">
             {availableContacts?.map((contact, index) => {
-              return (
-                <ContactCard
-                  key={index}
-                  contact={contact}
-                  onClick={() => handleContactOnClick(contact)}
-                />
-              );
+              if (contact.contactName.toLowerCase().includes(searchInput)) {
+                return (
+                  <ContactCard
+                    key={index}
+                    contact={contact}
+                    onClick={() => handleContactOnClick(contact)}
+                  />
+                );
+              }
             })}
           </div>
 
