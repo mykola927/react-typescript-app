@@ -10,12 +10,21 @@ interface Props {
   toFetchContacts: boolean;
   setToFetchContacts: any;
   user: any;
+  handleRemoveContact: (contactId: string) => void;
+  handleAddContact: (uid: string, contactName: string) => void;
 }
 
 export default function ContactsTab(props: Props) {
   const [isModalVisible, setIsModalVisible] = useState(false);
 
-  const { contacts = [], toFetchContacts, setToFetchContacts, user } = props;
+  const {
+    contacts = [],
+    toFetchContacts,
+    setToFetchContacts,
+    user,
+    handleRemoveContact,
+    handleAddContact,
+  } = props;
   return (
     <div className="contacts-tab">
       {contacts?.length === 0 && (
@@ -29,13 +38,14 @@ export default function ContactsTab(props: Props) {
         </div>
       )}
       <div className="contact-list">
+        {/* <button onClick={() => console.log(contacts)}>ddd</button> */}
         {contacts?.map((contact, index) => {
           return (
             <ContactCard
               key={index}
-              contactName={contact.contactName}
-              contactId={contact.uid}
-              contactImage={contact.photoURL}
+              contact={contact}
+              handleRemoveContact={handleRemoveContact}
+              // onClick={() => console.log(contact)}
             />
           );
         })}
@@ -50,6 +60,7 @@ export default function ContactsTab(props: Props) {
         setIsModalVisible={setIsModalVisible}
         toFetchContacts={toFetchContacts}
         setToFetchContacts={setToFetchContacts}
+        handleAddContact={handleAddContact}
       />
     </div>
   );

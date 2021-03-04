@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import { auth } from "../../firebase";
-import { addContact, fetchContacts } from "../../firebase/users";
+import { addContact } from "../../firebase/users";
 import { Modal, Input } from "antd";
 
 interface Contacts {
@@ -14,6 +13,7 @@ interface Props {
   setIsModalVisible: any;
   toFetchContacts: boolean;
   setToFetchContacts: any;
+  handleAddContact: any;
 }
 
 const initialContactState = {
@@ -26,12 +26,7 @@ export default function CreateContact(props: Props) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const {
-    isModalVisible,
-    setIsModalVisible,
-    setToFetchContacts,
-    toFetchContacts,
-  } = props;
+  const { isModalVisible, setIsModalVisible, handleAddContact } = props;
 
   const handleModalHide = () => {
     setIsModalVisible(false);
@@ -49,20 +44,19 @@ export default function CreateContact(props: Props) {
     }));
   };
 
-  const handleCreateContact = () => {
+  const handleCreateContact = async () => {
     if (contactDetails.uid && contactDetails.contactName) {
       setLoading(true);
-      addContact(contactDetails).then((res) => {
-        console.log(res);
-        if (res) {
-          setError(res);
+      await handleAddContact(contactDetails.uid, contactDetails.contactName)
+        .then((res: any) => {
           setLoading(false);
-        } else {
+          setIsModalVisible(false);
+          setContactDetails(initialContactState);
+        })
+        .catch((err: any) => {
+          setError(err);
           setLoading(false);
-          handleModalHide();
-          setToFetchContacts(!toFetchContacts);
-        }
-      });
+        });
     } else {
       setError("All input fields must be filled");
     }

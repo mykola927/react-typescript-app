@@ -155,9 +155,7 @@ export default function CreateConversation(props: Props) {
               return (
                 <ContactCard
                   key={index}
-                  contactName={contact.contactName}
-                  contactImage={contact.photoURL}
-                  contactId={contact.uid}
+                  contact={contact}
                   onClick={() => handleContactOnClick(contact)}
                 />
               );

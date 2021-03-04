@@ -1,3 +1,4 @@
+import ContactsTab from "../containers/ContactsTab";
 import { firestore, firebase, auth, storage } from "../firebase";
 
 const usersRef = firestore.collection("users");
@@ -32,49 +33,6 @@ interface AddContactParams {
 }
 
 // Contacts Section
-
-export const addContact = async (params: AddContactParams) => {
-  const currentUser = getCurrentUser();
-  const { uid } = params;
-
-  // check if user with given id exists
-  if (currentUser) {
-    return await usersRef
-      .where("uid", "==", uid)
-      .get()
-      .then(async (snapshot) => {
-        if (snapshot.empty) {
-          return "Contact with given id does not exist.";
-        } else {
-          // check if contact already exists
-          const currentUserRef = usersRef.doc(currentUser.uid);
-
-          return await usersRef
-            .doc(currentUser.uid)
-            .get()
-            .then(async (doc) => {
-              const data = doc.data();
-              if (data) {
-                const test = data.contacts.find(
-                  (elm: AddContactParams) => elm.uid === uid
-                );
-
-                if (test) {
-                  return "Contact already exists";
-                } else {
-                  await currentUserRef.update({
-                    contacts: firebase.firestore.FieldValue.arrayUnion(params),
-                  });
-                }
-
-                console.log(test);
-              }
-            });
-        }
-      })
-      .catch((err) => console.log(err));
-  }
-};
 
 export const fetchUserData = async () => {
   const currentUser = getCurrentUser();
@@ -148,5 +106,79 @@ export const removeProfileImage = async () => {
   if (currentUser) {
     const userRef = usersRef.doc(currentUser.uid);
     userRef.set({ photoURL: "" }, { merge: true });
+  }
+};
+
+export const addContact = async (params: AddContactParams) => {
+  const currentUser = getCurrentUser();
+  const { uid } = params;
+
+  // check if user with given id exists
+  if (currentUser) {
+    return await usersRef
+      .doc(currentUser.uid)
+      .get()
+      .then(async (doc) => {
+        const data = doc.data();
+        if (data) {
+          const doesContactExist = data.contacts.find(
+            (contact: any) => contact.uid === uid
+          );
+
+          if (!doesContactExist) {
+            const updatedContacts = [...data.contacts, params];
+            return await usersRef
+              .doc(currentUser.uid)
+              .update({
+                contacts: updatedContacts,
+              })
+              .then(async () => {
+                await fetchContacts().then((contacts) => {
+                  return contacts;
+                });
+              })
+              .catch((err) => {
+                console.log(err);
+                throw "Error with adding contact";
+              });
+          } else {
+            throw "Contact already exists";
+          }
+        } else {
+          throw "Logged in user not found";
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        throw "Error with adding contact";
+      });
+  }
+};
+
+export const removeContact = async (contactId: string) => {
+  const currentUser = getCurrentUser();
+
+  if (currentUser) {
+    const currentUserRef = usersRef.doc(currentUser.uid);
+    return await currentUserRef
+      .get()
+      .then(async (doc) => {
+        const data = doc.data();
+
+        if (data) {
+          const updatedContacts = data.contacts.filter(
+            (contact: any) => contact.uid !== contactId
+          );
+          return await currentUserRef
+            .update({
+              contacts: updatedContacts,
+            })
+            .then(() => {
+              console.log(updatedContacts);
+              return updatedContacts;
+            });
+        }
+      })
+      .catch((err) => console.log(err));
   }
 };

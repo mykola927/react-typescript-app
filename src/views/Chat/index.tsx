@@ -1,7 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { useCollectionData } from "react-firebase-hooks/firestore";
 import { firestore, auth } from "../../firebase";
-import { fetchContacts, fetchUserData } from "../../firebase/users";
+import {
+  addContact,
+  fetchContacts,
+  fetchUserData,
+  removeContact,
+} from "../../firebase/users";
 import Menu from "../../containers/Menu";
 import ChatRoom from "../../containers/ChatRoom";
 import "./styles.scss";
@@ -9,6 +14,7 @@ import "./styles.scss";
 export default function Chat() {
   const [user, setUser] = useState(null as any);
   const [contacts, setContacts] = useState([]);
+  const [toFetchContacts, setToFetchContacts] = useState(false);
   const [selectedChat, setSelectedChat] = useState(null as any);
 
   useEffect(() => {
@@ -44,13 +50,35 @@ export default function Chat() {
     fetchContacts()
       .then((res) => {
         setContacts(res);
-        console.log(res);
       })
       .catch((err) => console.error(err));
   }, []);
 
+  const handleAddContact = async (uid: string, contactName: string) => {
+    return await addContact({ uid, contactName })
+      .then(async (res) => {
+        await fetchContacts()
+          .then((res) => {
+            setContacts(res);
+          })
+          .catch((err) => console.error(err));
+      })
+      .catch((err) => {
+        throw err;
+      });
+  };
+
+  const handleRemoveContact = (contactId: string) => {
+    removeContact(contactId)
+      .then((res) => {
+        setContacts(res);
+      })
+      .catch((err) => console.error(err));
+  };
+
   const handleSelectChat = (chat: any) => {
     console.log(chat);
+    console.log(contacts);
     setSelectedChat(chat);
   };
 
@@ -64,6 +92,8 @@ export default function Chat() {
               contacts={contacts}
               conversations={conversations}
               handleSelectChat={handleSelectChat}
+              handleRemoveContact={handleRemoveContact}
+              handleAddContact={handleAddContact}
             />
           </div>
           <div className="app-container__content">

@@ -14,6 +14,8 @@ interface Props {
   contacts: ContactInterface[];
   conversations: any;
   handleSelectChat: (chat: any) => void;
+  handleRemoveContact: (contactId: string) => void;
+  handleAddContact: (uid: string, contactName: string) => void;
 }
 
 export default function MenuContent(props: Props) {
@@ -22,7 +24,14 @@ export default function MenuContent(props: Props) {
   const [profileImage, setProfileImage] = useState("" as any);
   const [loading, setLoading] = useState(false);
 
-  const { contacts, conversations, handleSelectChat, user } = props;
+  const {
+    contacts,
+    conversations,
+    handleSelectChat,
+    user,
+    handleRemoveContact,
+    handleAddContact,
+  } = props;
   const { currentUser } = auth;
 
   useEffect(() => {
@@ -131,6 +140,8 @@ export default function MenuContent(props: Props) {
                   contacts={contacts}
                   setToFetchContacts={setToFetchContacts}
                   toFetchContacts={toFetchContacts}
+                  handleRemoveContact={handleRemoveContact}
+                  handleAddContact={handleAddContact}
                 />
               </Tabs.TabPane>
             </Tabs>
