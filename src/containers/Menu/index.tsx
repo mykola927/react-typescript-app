@@ -16,6 +16,7 @@ interface Props {
   handleSelectChat: (chat: any) => void;
   handleRemoveContact: (contactId: string) => void;
   handleAddContact: (uid: string, contactName: string) => void;
+  handleUpdateContact: any;
 }
 
 export default function MenuContent(props: Props) {
@@ -31,6 +32,7 @@ export default function MenuContent(props: Props) {
     user,
     handleRemoveContact,
     handleAddContact,
+    handleUpdateContact,
   } = props;
   const { currentUser } = auth;
 
@@ -142,6 +144,7 @@ export default function MenuContent(props: Props) {
                   toFetchContacts={toFetchContacts}
                   handleRemoveContact={handleRemoveContact}
                   handleAddContact={handleAddContact}
+                  handleUpdateContact={handleUpdateContact}
                 />
               </Tabs.TabPane>
             </Tabs>

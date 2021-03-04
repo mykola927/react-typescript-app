@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import CreateContact from "../CreateContact";
 import ContactCard from "../../components/ContactCard";
+import EditContact from "../EditContact";
 import { ContactInterface } from "../../common/interfaces";
 import { Button } from "antd";
 import "./styles.scss";
@@ -12,10 +13,15 @@ interface Props {
   user: any;
   handleRemoveContact: (contactId: string) => void;
   handleAddContact: (uid: string, contactName: string) => void;
+  handleUpdateContact: any;
 }
 
 export default function ContactsTab(props: Props) {
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [editingContact, setEditingContact] = useState(false);
+  const [selectedContactName, setSelectedContactName] = useState("");
+  const [selectedContactId, setselectedContactId] = useState("");
+  const [test, setTest] = useState(false);
 
   const {
     contacts = [],
@@ -24,7 +30,15 @@ export default function ContactsTab(props: Props) {
     user,
     handleRemoveContact,
     handleAddContact,
+    handleUpdateContact,
   } = props;
+
+  const handleEditingContact = (contactName: string, contactId: string) => {
+    setEditingContact(!editingContact);
+    setSelectedContactName(contactName);
+    setselectedContactId(contactId);
+  };
+
   return (
     <div className="contacts-tab">
       {contacts?.length === 0 && (
@@ -38,14 +52,13 @@ export default function ContactsTab(props: Props) {
         </div>
       )}
       <div className="contact-list">
-        {/* <button onClick={() => console.log(contacts)}>ddd</button> */}
         {contacts?.map((contact, index) => {
           return (
             <ContactCard
               key={index}
               contact={contact}
               handleRemoveContact={handleRemoveContact}
-              // onClick={() => console.log(contact)}
+              handleEditingContact={handleEditingContact}
             />
           );
         })}
@@ -61,6 +74,13 @@ export default function ContactsTab(props: Props) {
         toFetchContacts={toFetchContacts}
         setToFetchContacts={setToFetchContacts}
         handleAddContact={handleAddContact}
+      />
+      <EditContact
+        contactId={selectedContactId}
+        contactName={selectedContactName}
+        isVisible={editingContact}
+        handleEditingContact={handleEditingContact}
+        handleUpdateContact={handleUpdateContact}
       />
     </div>
   );

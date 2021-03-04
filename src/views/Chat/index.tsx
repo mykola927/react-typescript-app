@@ -6,6 +6,7 @@ import {
   fetchContacts,
   fetchUserData,
   removeContact,
+  updateContactName,
 } from "../../firebase/users";
 import Menu from "../../containers/Menu";
 import ChatRoom from "../../containers/ChatRoom";
@@ -76,9 +77,20 @@ export default function Chat() {
       .catch((err) => console.error(err));
   };
 
+  const handleUpdateContact = async (
+    contactId: string,
+    contactName: string
+  ) => {
+    return await updateContactName(contactId, contactName)
+      .then((res: any) => {
+        setContacts(res);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  };
+
   const handleSelectChat = (chat: any) => {
-    console.log(chat);
-    console.log(contacts);
     setSelectedChat(chat);
   };
 
@@ -94,6 +106,7 @@ export default function Chat() {
               handleSelectChat={handleSelectChat}
               handleRemoveContact={handleRemoveContact}
               handleAddContact={handleAddContact}
+              handleUpdateContact={handleUpdateContact}
             />
           </div>
           <div className="app-container__content">

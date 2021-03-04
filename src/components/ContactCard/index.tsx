@@ -6,10 +6,11 @@ interface Props {
   contact: any;
   onClick?: () => void;
   handleRemoveContact?: (contactId: string) => void;
+  handleEditingContact?: any;
 }
 
 export default function ContactCard(props: Props) {
-  const { contact, onClick, handleRemoveContact } = props;
+  const { contact, onClick, handleRemoveContact, handleEditingContact } = props;
 
   return (
     <>
@@ -30,6 +31,9 @@ export default function ContactCard(props: Props) {
             type="text"
             shape="circle"
             icon={<EditOutlined style={{ color: "#555" }} />}
+            onClick={() =>
+              handleEditingContact(contact.contactName, contact.uid)
+            }
           />
           <Button
             type="text"

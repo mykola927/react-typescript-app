@@ -1,5 +1,4 @@
-import ContactsTab from "../containers/ContactsTab";
-import { firestore, firebase, auth, storage } from "../firebase";
+import { firestore, auth, storage } from "../firebase";
 
 const usersRef = firestore.collection("users");
 
@@ -169,14 +168,62 @@ export const removeContact = async (contactId: string) => {
           const updatedContacts = data.contacts.filter(
             (contact: any) => contact.uid !== contactId
           );
+
           return await currentUserRef
             .update({
               contacts: updatedContacts,
             })
-            .then(() => {
-              console.log(updatedContacts);
-              return updatedContacts;
+            .then(async () => {
+              return await fetchContacts()
+                .then((contacts) => {
+                  return contacts;
+                })
+                .catch((err) => console.error(err));
             });
+        }
+      })
+      .catch((err) => console.log(err));
+  }
+};
+
+export const updateContactName = async (
+  contactId: string,
+  contactName: string
+) => {
+  const currentUser = getCurrentUser();
+
+  if (currentUser) {
+    const currentUserRef = usersRef.doc(currentUser.uid);
+    return await currentUserRef
+      .get()
+      .then(async (doc) => {
+        const data = doc.data();
+
+        if (data) {
+          const contactIndex = data.contacts.findIndex(
+            (contact: any) => contact.uid === contactId
+          );
+
+          const updatedContacts = [...data.contacts];
+          updatedContacts[contactIndex] = {
+            ...updatedContacts[contactIndex],
+            contactName: contactName,
+          };
+
+          return await currentUserRef
+            .update({
+              contacts: updatedContacts,
+            })
+            .then(async () => {
+              return await fetchContacts()
+                .then((contacts) => {
+                  console.log(contacts);
+                  return contacts;
+                })
+                .catch((err) => console.error(err));
+            });
+        } else {
+          throw "Logged user not found";
         }
       })
       .catch((err) => console.log(err));
