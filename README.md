@@ -1,46 +1,17 @@
-# Getting Started with Create React App
+React Typescript - Web Chat Application 
+===========================================
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This a project I wanted to make after watching people on youtube making simple chat apps without real chat application functionality. I wanted to make a chat application with a bit more functionality than having an open group chat. The project is built with React.js, Typescript, Firebase, Sass and ant design.
+It can be viewed [here](https://react-typescript-chat-ap-d6740.web.app/).
 
-## Available Scripts
+## Functionality
+The app allows you to add contacts based on their id's which can be seen on the contact's tab. Once you have added your first contact, you can create a conversation which is basically a group that can be made from 2 contacts and more. Once you have created a conversation you can chat away with your contacts.
 
-In the project directory, you can run:
+You can sign in with your email or through google. In addition to the chat functionality you can upload and remove profile/conversation images, edit contact's name and remove him.
 
-### `npm start`
+## Getting Started
+The app can be installed by cloning the Git repository and running 'npm install' in the project directory. Once all packages are installed, you can run 'npm start' to run the app in localhost.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## Prerequisites
+You will need to have node and npm installed.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
