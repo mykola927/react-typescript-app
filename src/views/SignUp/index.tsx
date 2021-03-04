@@ -14,6 +14,7 @@ export default function SignUp() {
   });
   const [loading, setLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const handleOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     event.preventDefault();
@@ -29,6 +30,7 @@ export default function SignUp() {
 
     const { email, password, displayName } = userParams;
     if (email && password && displayName) {
+      setError("");
       setLoading(true);
       auth
         .createUserWithEmailAndPassword(email, password)
@@ -51,6 +53,8 @@ export default function SignUp() {
           }
         })
         .catch((error) => {
+          console.log(error);
+          setError(error.message);
           console.error(error);
           setLoading(false);
         });
@@ -62,6 +66,7 @@ export default function SignUp() {
 
     var provider = new firebase.auth.GoogleAuthProvider();
     setGoogleLoading(true);
+    setError("");
     auth
       .signInWithPopup(provider)
       .then(async (cred) => {
@@ -89,6 +94,8 @@ export default function SignUp() {
         }
       })
       .catch((error) => {
+        setError(error.message);
+        setGoogleLoading(false);
         console.error(error);
       });
   };
@@ -122,6 +129,9 @@ export default function SignUp() {
             placeholder="Enter a password"
             onChange={(e) => handleOnChange(e)}
           />
+          {error && (
+            <span style={{ color: "red", fontSize: "0.75rem" }}>{error}</span>
+          )}
           <Button
             onClick={handleOnSubmit}
             block
